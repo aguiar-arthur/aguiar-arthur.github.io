@@ -7,7 +7,6 @@ layout: default
 <head>
     <meta charset="utf-8">
     <title>{{ site.title }}</title>
-    <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
 </head>
 <body>
     <header>
@@ -19,8 +18,13 @@ layout: default
             <a href="{{ "/categories/" | relative_url }}">Categories</a>
         </nav>
     </header>
+    <br>
     <main>
-        <section id="latest-posts">
+        <section>
+            <a href="https://github.com/Aguiar575">My github</a>   
+        </section>
+        <br>
+        <section>
             <h2>Latest Posts</h2>
             <ul>
                 {% for post in site.posts limit:5 %}
@@ -31,27 +35,8 @@ layout: default
                 {% endfor %}
             </ul>
         </section>
-        <section id="tags">
-            <h2>Tags</h2>
-            <ul>
-                {% for tag in site.tags %}
-                    <li>
-                        <a href="{{ '/tags/' | append: tag[0] | relative_url }}">{{ tag[0] }} ({{ tag[1].size }})</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </section>
-        <section id="categories">
-            <h2>Categories</h2>
-            <ul>
-                {% for category in site.categories %}
-                    <li>
-                        <a href="{{ '/categories/' | append: category[0] | relative_url }}">{{ category[0] }} ({{ category[1].size }})</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </section>
     </main>
+    <br>
     <footer>
         <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
     </footer>
