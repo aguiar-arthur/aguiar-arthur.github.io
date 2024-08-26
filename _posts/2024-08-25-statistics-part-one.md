@@ -3,7 +3,6 @@ layout: post
 title:  "Statistics - Sampling and tendency"
 date:   2024-08-25 13:00:00
 categories: statistics
-tags: [sampling, tendency]
 ---
 
 Often, we learn to use machine learning models without knowing the logic behind them. The intention of this series is to show the basis of these models so that we can apply them in better ways in our work, thereby increasing the quality of knowledge.
