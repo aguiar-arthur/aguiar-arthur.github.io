@@ -18,19 +18,29 @@ layout: default
             <a href="{{ "/categories/" | relative_url }}">Categories</a>
         </nav>
     </header>
-    <br>
     <main>
         <section>
-            <a href="https://github.com/Aguiar575">My github</a>   
+            <h5>
+                Hello, my name is Arthur, 
+                I like to play with low level programming, 
+                and languages that almost no one cares about.
+                <br>
+                <ul>
+                    <li>
+                        <a href="https://github.com/Aguiar575">My github</a>
+                    </li>
+                    <li>
+                        I use VIM BTW
+                    </li>
+                </ul>
+            <h5>
         </section>
-        <br>
         <section>
             <h2>Latest Posts</h2>
             <ul>
                 {% for post in site.posts limit:5 %}
                     <li>
                         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                        <p>{{ post.excerpt | truncate: 100 }}</p>
                     </li>
                 {% endfor %}
             </ul>
