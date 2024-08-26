@@ -1,10 +1,8 @@
 ---
-layout: default
+layout: post
 title: Categories
 permalink: /categories/
 ---
-
-<h1>Categories</h1>
 
 <ul>
   {% for category in site.categories %}
@@ -13,6 +11,7 @@ permalink: /categories/
       <ul>
         {% for post in category[1] %}
           <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+          <br>
         {% endfor %}
       </ul>
     </li>
