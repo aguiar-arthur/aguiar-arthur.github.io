@@ -3,7 +3,7 @@ layout: post
 title:  "Big O is not difficult - Part 1"
 date:   2024-08-29 23:00:00
 categories: ["Computer Science"]
-Tags: ["Algorithms", "Big O"]
+tags: ["Algorithms", "Big O"]
 ---
 
 {% include mathjax.html %}
