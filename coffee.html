@@ -1,0 +1,34 @@
+---
+layout: post
+title: Coffee
+permalink: /coffee/
+---
+<head>
+    <meta charset="utf-8">
+    <title>{{ site.title }}</title>
+    <style>
+        .border-box {
+            border: 2px solid black; 
+            padding: 5px 10px; 
+            margin: 10px 0; 
+        }
+    </style>
+</head>
+
+<main>
+    <section class="border-box">
+        <h6>
+            Those are my coffee recipes and tests. And I steal them with no regret.
+        </h6>
+    </section>
+    <section>
+        <ul>
+            {% for post in site.coffee %}
+            <li>
+                <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                <p>{{ post.date | date: "%B %d, %Y" }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+</main>
