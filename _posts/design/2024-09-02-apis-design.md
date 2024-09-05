@@ -29,14 +29,12 @@ Like this:
 Queries can help you identify different endpoints. They're our bread and butter overflow.
 
 ```jsx
-/orders?status=pending&date_from=2024-01-01&date_to=2024-12-31
 /articles?author=john_doe&tags=technology,science
 /events?location=new_york&start_date=2024-09-01
 ```
 
 These examples demonstrate how queries can be used to filter, sort, and specify parameters for API endpoints:
 
-- Retrieving orders based on status and date range
 - Fetching articles by a specific author with certain tags
 - Finding events in a particular location starting from a given date
 
