@@ -26,7 +26,6 @@ permalink: /coffee/
             {% for post in site.coffee %}
             <li>
                 <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                <p>{{ post.date | date: "%B %d, %Y" }}</p>
             </li>
             {% endfor %}
         </ul>
