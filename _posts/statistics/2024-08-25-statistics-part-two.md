@@ -91,3 +91,8 @@ For one event to happen, another event must occur first.
 These events do not depend on a previous event to occur.
 
 Thanks, bye!
+
+## References
+
+**All credits to the original sources for the images used in this document.**
+

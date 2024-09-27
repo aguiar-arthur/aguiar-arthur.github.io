@@ -195,3 +195,7 @@ Mode is a measure of central tendency.
 It returns the most frequently occurring data in a group and can also be used with non-numeric resources.
 
 Thanks, bye!
+
+## References
+
+**All credits to the original sources for the images used in this document.**
