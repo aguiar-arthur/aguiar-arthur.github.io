@@ -50,7 +50,7 @@ Where:
 %}
 
 **It is also applied in triangles:** if a line parallel to one side of a triangle intersects the other two sides, it divides them proportionally, forming a smaller triangle that is similar to the original.
-This concept is essential in proving similarity between geometric figures and solving related problems.
+This is congruence! (I've already talked about this in my previous posts.)
 
 {% include image.html 
    image="https://www.geogebra.org/resource/DczN7FZj/iO62hmHSB4RwsX2a/material-DczN7FZj.png" 
