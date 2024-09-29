@@ -6,6 +6,8 @@ categories: ["Computer Science"]
 tags: ["Assembly"]
 ---
 
+{% include coderay.html %}
+
 Working directly with assembly, is fun, but you need to be efficient we should take care of our data access. To tackle this, we need to know about **Addressing Modes.** 
 
 Addressing nodes are techniques to access data from memory and registers. 
