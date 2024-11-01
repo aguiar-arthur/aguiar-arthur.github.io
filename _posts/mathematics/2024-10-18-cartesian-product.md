@@ -61,6 +61,5 @@ Thanks, bye!
 
 ## References:
 
-Halmos, P. R. *Naive Set Theory*. Springer, 1974.
-
-Apostol, T. M. *Mathematical Analysis*. Addison-Wesley, 1974
+- Halmos, P. R. *Naive Set Theory*. Springer, 1974.
+- Apostol, T. M. *Mathematical Analysis*. Addison-Wesley, 1974
