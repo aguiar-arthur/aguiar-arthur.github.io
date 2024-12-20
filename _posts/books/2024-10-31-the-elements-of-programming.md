@@ -37,7 +37,7 @@ You need to have active voice for direct, vigorous writing.
 In programming, this is akin to writing code that **clearly expresses intended actions**. 
 There is no need to have small names, small names are the enemy of an understandable code. 
 
-### Tanks, bye
+### Thanks, bye
 
 I like to talk about coding, but I'm not any source of truth. Just try to not mess your code base, is painful to work with shitty code.  
 
