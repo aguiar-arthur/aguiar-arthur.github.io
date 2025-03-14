@@ -34,16 +34,14 @@ y \\
 In ML we often see vectors in word embbedings in NLP, they represent words in a high-dimensional space.
 
 In this examples I'll be using vectors aside Real numbers ℝ, so I can say that vector recive the ℝ properties, we can use **Association**:
-<br>
-**for any $$u,v,w ∈V, (u+v)+w=u+(v+w)$$**
-<br>
-and **Commutativity**:
-<br>
-**for any $$u,v ∈V, u+v=v+u$$**
-<br>
-also is possible to **sum** and **multiply**(usig scalars) them.
 
-Here is the properly formatted definition using KaTeX:
+- **for any $$u,v,w ∈V, (u+v)+w=u+(v+w)$$**
+
+and **Commutativity**:
+
+- **for any $$u,v ∈V, u+v=v+u$$**
+
+also is possible to **sum** and **multiply**(usig scalars) them.
 
 **Definition of a Linear Combination**  
 
