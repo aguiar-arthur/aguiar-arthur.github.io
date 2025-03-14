@@ -96,7 +96,7 @@ where:
 - $$x_i$$ are the input values.  
 - $$y_i$$ are the output values.  
 
-EXAMPLE HERE
+[Getting the scalars example](https://github.com/aguiar-arthur/linear-algebra-notebooks/blob/main/calculating_coefficients.nb)
 
 #### **Role of the Bias $$(c_0)$$**  
 
@@ -118,6 +118,12 @@ The **slope** and **bias** define the relationship between inputs and outputs, a
 #### **Flexibility**  
 By adjusting the **slope** and **bias**, the model can fit a wide range of data patterns, from simple linear relationships to more complex ones (in the case of **multiple linear regression**).  
 
-Here is an example, applying everything I talked here (a little bit more, just to make the model work better)
+Let's finish with an example, applying everything I talked here (a little bit more, just to make the model better)
 
-EXAMPLE HERE
+[Predicting numbers](https://github.com/aguiar-arthur/linear-algebra-notebooks/blob/main/machine_learning/predicting_numbers.nb)
+
+Thanks, bye!
+
+## References
+
+- BOLDRINI, *R. ÁLgebra Linear. 3. ed.*, Harbra, 1984.
