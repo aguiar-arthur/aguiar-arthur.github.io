@@ -9,7 +9,7 @@ categories: ["Mathematics"]
 
 Linear combination is as process of combining a set of vectors using scalar (a real number ℝ or a complex number ℂ) multiplication and addition.
 
-### First of all, what are vectors
+## Vectors
 
  vectors are mathematical objects that represent quantities with both magnitude (size) and direction. In a linear combination, vectors are the "building blocks" that are scaled (multiplied by scalars) and added together to create new vectors.
 
@@ -43,7 +43,7 @@ and **Commutativity**:
 
 also is possible to **sum** and **multiply**(usig scalars) them.
 
-**Definition of a Linear Combination**  
+## Linear Combination
 
 Given a set of vectors $$v_1, v_2, \dots, v_n$$ and scalars $$c_1, c_2, \dots, c_n$$ (which are real or complex numbers), a **linear combination** of these vectors is an expression of the form:  
 
