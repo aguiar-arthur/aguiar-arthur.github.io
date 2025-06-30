@@ -1,0 +1,21 @@
+<!-- _includes/pdf-viewer.html -->
+<div class="pdf-container">
+  <!-- Open in New Tab Button -->
+  <div style="margin-bottom: 10px;">
+    <a href="{{ include.file }}" target="_blank" rel="noopener noreferrer" style="
+      display: inline-block;
+      padding: 8px 16px;
+      border: 2px solid #000;
+      text-decoration: none;
+      color: inherit;
+      font-weight: bold;
+    ">Open PDF in New Tab</a>
+  </div>
+
+  <!-- PDF Viewer -->
+  <object data="{{ include.file }}" type="application/pdf" width="100%" height="{{ include.height | default: '600px' }}">
+    <iframe src="https://docs.google.com/viewer?url={{ site.url }}{{ include.file }}&embedded=true"
+            width="100%" height="{{ include.height | default: '600px' }}">
+    </iframe>
+  </object>
+</div>

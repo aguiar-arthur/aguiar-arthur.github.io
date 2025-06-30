@@ -1,0 +1,22 @@
+<!-- _includes/warning.html -->
+<div role="alert" style="
+  border: 2px solid #000;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+">
+  <div>
+    <!-- Warning Content -->
+      {% if include.title %}
+        <h6 style="
+          margin: 0 0 0.5rem 0;
+          font-weight: bold;
+          font-size: 1rem;">
+          {{ include.title }}</h6>
+      {% endif %}
+
+      <div style="margin: 0;
+                  font-size: 1rem;">
+        {{ include.text | markdownify | remove: '<p>' | remove: '</p>' }}
+      </div>
+    </div>
+</div>
