@@ -11,11 +11,4 @@
       font-weight: bold;
     ">Open PDF in New Tab</a>
   </div>
-
-  <!-- PDF Viewer -->
-  <object data="{{ include.file }}" type="application/pdf" width="100%" height="{{ include.height | default: '600px' }}">
-    <iframe src="https://docs.google.com/viewer?url={{ site.url }}{{ include.file }}&embedded=true"
-            width="100%" height="{{ include.height | default: '600px' }}">
-    </iframe>
-  </object>
 </div>
