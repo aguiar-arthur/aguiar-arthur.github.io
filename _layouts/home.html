@@ -1,7 +1,6 @@
 ---
 layout: default
 ---
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +19,7 @@ layout: default
         <h1>{{ site.title }}</h1>
         <nav>
             <a href="{{ "/posts/" | relative_url }}">Posts</a>
+            <a href="{{ "/annotations/" | relative_url }}">Annotations</a>
             <a href="{{ "/tags/" | relative_url }}">Tags</a>
             <a href="{{ "/categories/" | relative_url }}">Categories</a>
         </nav>
@@ -27,10 +27,10 @@ layout: default
     <main>
         <section>
             <h5 class="border-box">
-                Hello, my name is Arthur, 
-                I like to play with low level programming, 
+                Hello, my name is Arthur,
+                I like to play with low level programming,
                 and languages that almost no one cares about.
-                Here I talk about mathematics and computer science. 
+                Here I talk about mathematics and computer science.
                <br>
                 <ul>
                     <li>
@@ -45,16 +45,38 @@ layout: default
                 </ul>
             </h5>
         </section>
+
         <section>
             <h2>Latest Posts</h2>
             <ul>
                 {% for post in site.posts limit:5 %}
+                    {% unless post.path contains 'annotations' %}
+                        <li>
+                            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                        </li>
+                        <br>
+                    {% endunless %}
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Latest Annotations</h2>
+            <ul>
+                {% assign annotation_posts = site.posts | where_exp: "post", "post.path contains '_posts/annotations'" %}
+                {% for post in annotation_posts limit:3 %}
                     <li>
                         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
                     </li>
                     <br>
                 {% endfor %}
+                {% if annotation_posts.size == 0 %}
+                    <li><em>No annotations yet</em></li>
+                {% endif %}
             </ul>
+            {% if annotation_posts.size > 3 %}
+                <p><a href="{{ "/annotations/" | relative_url }}">View all annotations →</a></p>
+            {% endif %}
         </section>
     </main>
     <footer>
@@ -62,4 +84,3 @@ layout: default
     </footer>
 </body>
 </html>
-
