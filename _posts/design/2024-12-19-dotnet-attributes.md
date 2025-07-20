@@ -2,7 +2,8 @@
 layout: post
 title:  "Dotnet Attributes: You Should Be Using More"
 date:   2024-12-19 23:50:00
-categories: ["Design", "Dotnet"]
+categories: ["Programming"]
+tags: ["Dotnet"]
 ---
 
 ### Why?
