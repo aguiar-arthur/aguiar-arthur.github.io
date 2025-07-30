@@ -1,0 +1,24 @@
+---
+layout: post
+title: All Annotations
+permalink: /annotations/principal/
+---
+
+<header>
+  <nav>
+    <a href="{{ "/annotations/tags/" | relative_url }}">Tags</a>
+    <a href="{{ "/annotations/categories/" | relative_url }}">Categories</a>
+  </nav>
+</header>
+
+<br>
+
+<ul>
+  {% assign annotation_posts = site.posts | where_exp: "post", "post.path contains '_posts/annotations'" %}
+  {% for post in annotation_posts %}
+    <li>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <p>{{ post.date | date: "%B %d, %Y" }}</p>
+    </li>
+  {% endfor %}
+</ul>

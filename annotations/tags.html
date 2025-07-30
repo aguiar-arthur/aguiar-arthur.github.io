@@ -1,0 +1,25 @@
+---
+layout: post
+title: Tags
+permalink: /annotations/tags/
+---
+<ul>
+  {% for tag in site.tags %}
+    {% assign filtered_posts = '' | split: '' %}
+    {% for post in tag[1] %}
+      {% if post.path contains 'annotations' %}
+        {% assign filtered_posts = filtered_posts | push: post %}
+      {% endif %}
+    {% endfor %}
+    {% if filtered_posts.size > 0 %}
+      <li>
+        <h2>{{ tag[0] }}</h2>
+        <ul>
+          {% for post in filtered_posts %}
+            <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

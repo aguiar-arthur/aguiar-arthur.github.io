@@ -1,0 +1,23 @@
+---
+layout: post
+title: All Posts
+permalink: /posts/principal/
+---
+
+<header>
+  <nav>
+    <a href="{{ "/posts/tags/" | relative_url }}">Tags</a>
+    <a href="{{ "/posts/categories/" | relative_url }}">Categories</a>
+  </nav>
+</header>
+
+<ul>
+  {% for post in site.posts %}
+    {% unless post.path contains 'annotations' %}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <p>{{ post.date | date: "%B %d, %Y" }}</p>
+      </li>
+    {% endunless %}
+  {% endfor %}
+</ul>

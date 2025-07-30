@@ -1,0 +1,26 @@
+---
+layout: post
+title: Categories
+permalink: /annotations/categories/
+---
+<ul>
+  {% for category in site.categories %}
+    {% assign filtered_posts = '' | split: '' %}
+    {% for post in category[1] %}
+      {% if post.path contains 'annotations' %}
+        {% assign filtered_posts = filtered_posts | push: post %}
+      {% endif %}
+    {% endfor %}
+    {% if filtered_posts.size > 0 %}
+      <li>
+        <h2>{{ category[0] }}</h2>
+        <ul>
+          {% for post in filtered_posts %}
+            <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+            <br>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

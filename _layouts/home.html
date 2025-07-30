@@ -18,10 +18,8 @@ layout: default
     <header>
         <h1>{{ site.title }}</h1>
         <nav>
-            <a href="{{ "/posts/" | relative_url }}">Posts</a>
-            <a href="{{ "/annotations/" | relative_url }}">Annotations</a>
-            <a href="{{ "/tags/" | relative_url }}">Tags</a>
-            <a href="{{ "/categories/" | relative_url }}">Categories</a>
+            <a href="{{ "/posts/principal" | relative_url }}">Posts</a>
+            <a href="{{ "/annotations/principal" | relative_url }}">Annotations</a>
         </nav>
     </header>
     <main>
@@ -45,21 +43,22 @@ layout: default
                 </ul>
             </h5>
         </section>
-
         <section>
             <h2>Latest Posts</h2>
             <ul>
-                {% for post in site.posts limit:5 %}
+                {% assign regular_posts = '' | split: '' %}
+                {% for post in site.posts %}
                     {% unless post.path contains 'annotations' %}
-                        <li>
-                            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                        </li>
-                        <br>
+                        {% assign regular_posts = regular_posts | push: post %}
                     {% endunless %}
+                {% endfor %}
+                {% for post in regular_posts limit:5 %}
+                    <li>
+                        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                    </li>
                 {% endfor %}
             </ul>
         </section>
-
         <section>
             <h2>Latest Annotations</h2>
             <ul>
@@ -68,15 +67,8 @@ layout: default
                     <li>
                         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
                     </li>
-                    <br>
                 {% endfor %}
-                {% if annotation_posts.size == 0 %}
-                    <li><em>No annotations yet</em></li>
-                {% endif %}
             </ul>
-            {% if annotation_posts.size > 3 %}
-                <p><a href="{{ "/annotations/" | relative_url }}">View all annotations →</a></p>
-            {% endif %}
         </section>
     </main>
     <footer>
