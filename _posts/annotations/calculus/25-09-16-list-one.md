@@ -1,6 +1,6 @@
 ---
 layout: post
-ritle:  "Calculus - List One"
+title:  "Calculus - List One"
 date:   2025-09-16 07:30:00
 categories: ["Mathematics"]
 tags: ["Calculus"]
