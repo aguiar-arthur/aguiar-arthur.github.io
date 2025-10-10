@@ -6,4 +6,4 @@ categories: ["Mathematics"]
 tags: ["Calculus"]
 ---
 
-{% include pdf-viewer.html file="/assets/pdfs/calculus/infinity_limits.pdf" height="800px" %}
+{% include pdf-viewer.html file="/assets/pdfs/cdi_one/infinity_limits.pdf" height="800px" %}

@@ -6,4 +6,4 @@ categories: ["Mathematics"]
 tags: ["Calculus"]
 ---
 
-{% include pdf-viewer.html file="/assets/pdfs/calculus/limit_properties.pdf" height="800px" %}
+{% include pdf-viewer.html file="/assets/pdfs/cdi_one/limit_properties.pdf" height="800px" %}

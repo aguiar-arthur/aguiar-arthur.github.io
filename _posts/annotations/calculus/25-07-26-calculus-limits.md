@@ -10,4 +10,4 @@ tags: ["Calculus"]
    title="About the language" 
    text="This document is in pt-br, there's no translation to english." %}
  
-{% include pdf-viewer.html file="/assets/pdfs/calculus/calculus_limits.pdf" height="800px" %}
+{% include pdf-viewer.html file="/assets/pdfs/cdi_one/calculus_limits.pdf" height="800px" %}
