@@ -1,0 +1,15 @@
+---
+layout: post
+title: All Books 
+permalink: /books/principal/
+---
+
+<ul>
+  {% assign books = site.posts | where_exp: "post", "post.path contains '_posts/books'" %}
+  {% for post in books %}
+    <li>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <p>{{ post.date | date: "%B %d, %Y" }}</p>
+    </li>
+  {% endfor %}
+</ul>

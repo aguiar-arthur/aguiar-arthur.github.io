@@ -7,7 +7,7 @@ permalink: /posts/categories/
   {% for category in site.categories %}
     {% assign filtered_posts = '' | split: '' %}
     {% for post in category[1] %}
-      {% unless post.path contains 'annotations' %}
+      {% unless post.path contains 'annotations' or post.path contains 'books' %}
         {% assign filtered_posts = filtered_posts | push: post %}
       {% endunless %}
     {% endfor %}

@@ -13,7 +13,7 @@ permalink: /posts/principal/
 
 <ul>
   {% for post in site.posts %}
-    {% unless post.path contains 'annotations' %}
+    {% unless post.path contains 'annotations' or post.path contains 'books' %}
       <li>
         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <p>{{ post.date | date: "%B %d, %Y" }}</p>
