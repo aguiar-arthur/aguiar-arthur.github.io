@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "Calculus - Cos Sin limits"
-date:   2025-10-09 07:30:00
+ritle:  "Lateral Limits"
+date:   2025-08-17 20:10:00
 categories: ["Mathematics"]
-tags: ["Calculus"]
+tags: ["CDI one"]
 ---
 
 {% include warning.html 
    title="About the language" 
    text="This document is in pt-br, there's no translation to english." %}
-   
-{% include pdf-viewer.html file="/assets/pdfs/cdi_one/cos_sin_limits.pdf" height="800px" %}
+ 
+{% include pdf-viewer.html file="/assets/pdfs/cdi_one/lateral_limits.pdf" height="800px" %}
