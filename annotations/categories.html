@@ -5,12 +5,7 @@ permalink: /annotations/categories/
 ---
 <ul>
   {% for category in site.categories %}
-    {% assign filtered_posts = '' | split: '' %}
-    {% for post in category[1] %}
-      {% if post.path contains 'annotations' %}
-        {% assign filtered_posts = filtered_posts | push: post %}
-      {% endif %}
-    {% endfor %}
+    {% assign filtered_posts = category[1] | where_exp: "post", "post.collection == 'annotations'" %}
     {% if filtered_posts.size > 0 %}
       <li>
         <h2>{{ category[0] }}</h2>

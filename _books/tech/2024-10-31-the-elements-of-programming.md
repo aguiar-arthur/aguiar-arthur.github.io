@@ -2,7 +2,8 @@
 layout: post
 title:  "Elements of programming style"
 date:   2024-10-31 23:52:00
-categories: ["Books"]
+categories: ["Programming in general"]
+tags: ["tech"]
 ---
 
 Recently, I finished reading *The Elements of Style*. Even for me, a non-native speaker, this little book brought me some good moments. 

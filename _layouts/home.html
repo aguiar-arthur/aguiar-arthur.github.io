@@ -2,47 +2,66 @@
 layout: default
 ---
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8">
-    <title>{{ site.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | default: site.title }}</title>
     <style>
         .border-box {
             border: 2px solid black; 
             padding: 5px 10px; 
             margin: 10px 0; 
         }
+        .skip-link {
+            position: absolute;
+            left: -999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: static;
+            width: auto;
+            height: auto;
+            padding: 8px;
+            background: #000;
+            color: #fff;
+            z-index: 1000;
+        }
+        a:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
+    <a class="skip-link" href="#content">Skip to content</a>
     <header>
         <h1>{{ site.title }}</h1>
-        <nav>
-            <a href="{{ "/posts/principal" | relative_url }}">Posts</a>
+        <nav aria-label="Main navigation">
+            <a href="{{ "/posts/principal" | relative_url }}" aria-current="page">Posts</a>
             <a href="{{ "/annotations/principal" | relative_url }}">Annotations</a>
             <a href="{{ "/books/principal" | relative_url }}">Books</a>
+            <a href="{{ "/calligraphy/principal" | relative_url }}">Calligraphy</a>
         </nav>
     </header>
-    <main>
+    <main id="content">
         <section>
-            <h5 class="border-box">
-                Hello, my name is Arthur,
-                I like to play with low level programming,
-                and languages that almost no one cares about.
-                Here I talk about mathematics and computer science.
-               <br>
+            <div class="border-box">
+                <p>
+                    Hello, my name is Arthur,
+                    I like to play with low level programming,
+                    and languages that almost no one cares about.
+                    Here I talk about mathematics and computer science.
+                </p>
                 <ul>
-                    <li>
-                        <a href="https://github.com/aguiar-arthur">My Github</a>
-                    </li>
-                    <li>
-                        <a href="https://www.linkedin.com/in/aguiar-arthur">My LinkedIn</a>
-                    </li>
-                    <li>
-                        <a href="mailto:aguiar99arthur@proton.me">Send an Email</a>
-                    </li>
+                    <li><a href="https://github.com/aguiar-arthur">My Github</a></li>
+                    <li><a href="https://www.linkedin.com/in/aguiar-arthur">My LinkedIn</a></li>
+                    <li><a href="mailto:aguiar99arthur@proton.me">Send an Email</a></li>
                 </ul>
-            </h5>
+            </div>
         </section>
         <section>
             <h2>Latest Posts</h2>
@@ -63,12 +82,20 @@ layout: default
         <section>
             <h2>Latest Annotations</h2>
             <ul>
-                {% assign annotation_posts = site.posts | where_exp: "post", "post.path contains '_posts/annotations'" %}
-                {% for post in annotation_posts limit:3 %}
-                    <li>
-                        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                    </li>
-                {% endfor %}
+                {% assign annotation_posts = site.annotations %}
+                {% if annotation_posts and annotation_posts != empty %}
+                    {% assign annotation_posts = annotation_posts | sort: "date" | reverse %}
+                {% else %}
+                    {% assign annotation_posts = site.posts | where_exp: "post", "post.path contains '_posts/annotations'" | sort: "date" | reverse %}
+                {% endif %}
+
+                {% if annotation_posts and annotation_posts != empty %}
+                    {% for post in annotation_posts limit:3 %}
+                        <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <li>No annotations yet.</li>
+                {% endif %}
             </ul>
         </section>
     </main>

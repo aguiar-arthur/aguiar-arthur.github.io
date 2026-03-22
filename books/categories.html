@@ -1,0 +1,29 @@
+---
+layout: post
+title: Books Categories
+permalink: /books/categories/
+---
+<ul>
+  {% assign all_books = site.books %}
+  {% assign book_categories = '' | split: '' %}
+  {% for post in all_books %}
+    {% for category in post.categories %}
+      {% assign book_categories = book_categories | push: category %}
+    {% endfor %}
+  {% endfor %}
+  {% assign unique_book_categories = book_categories | uniq | sort %}
+  {% for category in unique_book_categories %}
+    {% assign filtered_posts = all_books | where_exp: "post", "post.categories contains category" %}
+    {% if filtered_posts.size > 0 %}
+      <li>
+        <h2>{{ category }}</h2>
+        <ul>
+          {% for post in filtered_posts %}
+            <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+            <br>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

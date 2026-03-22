@@ -4,12 +4,25 @@ title: All Books
 permalink: /books/principal/
 ---
 
+<header>
+  <nav>
+    <a href="{{ "/books/tags/" | relative_url }}">Tags</a>
+    <a href="{{ "/books/categories/" | relative_url }}">Categories</a>
+  </nav>
+</header>
+
+<br>
+
 <ul>
-  {% assign books = site.posts | where_exp: "post", "post.path contains '_posts/books'" %}
-  {% for post in books %}
-    <li>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-      <p>{{ post.date | date: "%B %d, %Y" }}</p>
-    </li>
-  {% endfor %}
+  {% assign books = site.books | sort: "date" | reverse %}
+  {% if books and books != empty %}
+    {% for post in books %}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <p>{{ post.date | date: "%B %d, %Y" }}</p>
+      </li>
+    {% endfor %}
+  {% else %}
+    <li>No books available yet.</li>
+  {% endif %}
 </ul>

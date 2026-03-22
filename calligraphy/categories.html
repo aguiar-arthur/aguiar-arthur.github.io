@@ -1,0 +1,29 @@
+---
+layout: post
+title: Calligraphy Categories
+permalink: /calligraphy/categories/
+---
+<ul>
+  {% assign all_calligraphy = site.calligraphy %}
+  {% assign calligraphy_categories = '' | split: '' %}
+  {% for post in all_calligraphy %}
+    {% for category in post.categories %}
+      {% assign calligraphy_categories = calligraphy_categories | push: category %}
+    {% endfor %}
+  {% endfor %}
+  {% assign unique_calligraphy_categories = calligraphy_categories | uniq | sort %}
+  {% for category in unique_calligraphy_categories %}
+    {% assign filtered_posts = all_calligraphy | where_exp: "post", "post.categories contains category" %}
+    {% if filtered_posts.size > 0 %}
+      <li>
+        <h2>{{ category }}</h2>
+        <ul>
+          {% for post in filtered_posts %}
+            <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+            <br>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

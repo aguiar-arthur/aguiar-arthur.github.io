@@ -44,6 +44,43 @@ kramdown:
   syntax_highlighter: coderay
 coderay:
   coderay_css: class
+
+collections:
+  posts:
+    output: true
+    permalink: /posts/:year/:month/:day/:title/
+  annotations:
+    output: true
+    permalink: /annotations/:path/
+  books:
+    output: true
+    permalink: /books/:path/
+  calligraphy:
+    output: true
+    permalink: /calligraphy/:path/
+
+defaults:
+  - scope:
+      path: "" # empty means all files
+      type: "posts"
+    values:
+      layout: post
+  - scope:
+      path: "" 
+      type: "annotations"
+    values:
+      layout: post
+  - scope:
+      path: ""
+      type: "books"
+    values:
+      layout: post
+  - scope:
+      path: ""
+      type: "calligraphy"
+    values:
+      layout: post
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

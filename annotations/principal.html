@@ -14,7 +14,7 @@ permalink: /annotations/principal/
 <br>
 
 <ul>
-  {% assign annotation_posts = site.posts | where_exp: "post", "post.path contains '_posts/annotations'" %}
+  {% assign annotation_posts = site.annotations | sort: "date" | reverse %}
   {% for post in annotation_posts %}
     <li>
       <a href="{{ post.url | relative_url }}">{{ post.title }}</a>

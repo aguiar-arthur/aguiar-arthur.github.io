@@ -1,0 +1,28 @@
+---
+layout: post
+title: All Calligraphy 
+permalink: /calligraphy/principal/
+---
+
+<header>
+  <nav>
+    <a href="{{ "/calligraphy/tags/" | relative_url }}">Tags</a>
+    <a href="{{ "/calligraphy/categories/" | relative_url }}">Categories</a>
+  </nav>
+</header>
+
+<br>
+
+<ul>
+  {% assign calligraphy_items = site.calligraphy | sort: "date" | reverse %}
+  {% if calligraphy_items and calligraphy_items != empty %}
+    {% for post in calligraphy_items %}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <p>{{ post.date | date: "%B %d, %Y" }}</p>
+      </li>
+    {% endfor %}
+  {% else %}
+    <li>No calligraphy items available yet.</li>
+  {% endif %}
+</ul>
