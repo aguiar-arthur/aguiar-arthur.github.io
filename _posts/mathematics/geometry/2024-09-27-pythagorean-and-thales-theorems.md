@@ -25,10 +25,9 @@ Where:
 - $$a$$ and $$b$$ are the length of the legs
 - $$c$$  is the length of the hypotenuse
 
-{% include image.html 
-   image="https://ichef.bbci.co.uk/images/ic/1200xn/p0dn6xn6.png" 
-   alt="A triangle examplainig the pythagorean theorem" 
-%}
+<img width="500" 
+     src="https://ichef.bbci.co.uk/images/ic/1200xn/p0dn6xn6.png" 
+     alt="A triangle examplainig the pythagorean theorem">
 
 ## Thales' Theorem
 
@@ -44,18 +43,16 @@ Where:
 - $$C_1D_1$$ and $$C_2D_2$$ are the corresponding segments on the other transversal.
 
 
-{% include image.html 
-   image="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Thales%27_Theorem_Simple.svg/1200px-Thales%27_Theorem_Simple.svg.png" 
-   alt="A triangle inside a circle, examplainig the Thale's theorem" 
-%}
+<img width="500" 
+     src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Thales%27_Theorem_Simple.svg/1200px-Thales%27_Theorem_Simple.svg.png" 
+     alt="A triangle inside a circle, examplainig the Thale's theorem">
 
 **It is also applied in triangles:** if a line parallel to one side of a triangle intersects the other two sides, it divides them proportionally, forming a smaller triangle that is similar to the original.
 This is congruence! (I've already talked about this in my previous posts.)
 
-{% include image.html 
-   image="https://www.geogebra.org/resource/DczN7FZj/iO62hmHSB4RwsX2a/material-DczN7FZj.png" 
-   alt="A triangle intersection, showing that they are congruent." 
-%}
+<img width="500" 
+     src="https://www.geogebra.org/resource/DczN7FZj/iO62hmHSB4RwsX2a/material-DczN7FZj.png" 
+     alt="A triangle intersection, showing that they are congruent.">
 
 Thanks, bye!
 
