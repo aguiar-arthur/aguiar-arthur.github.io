@@ -17,7 +17,7 @@ The simplest examples focus on a database—a basic one, without sharding. Befor
 you write the changes to a log file. If the database crashes in the middle of a transaction, 
 it can recover the actions by referring to the log file.
 
-<img src="{{ site.url }}{{ site.base_image_path }}wal-sequence.svg" alt="WAL Sequence">
+<img src="{{ site.url }}{{ site.base_image_path }}posts/design/wal-sequence.svg" alt="WAL Sequence">
 
 ## Multiple nodes
 
@@ -39,7 +39,7 @@ Each time the followers receive a heartbeat, they reset their election timers up
 
 **Note:** Each signal send a metadata, with a index pointing the commited changes. 
 
-<img src="{{ site.url }}{{ site.base_image_path }}heartbeat-sequence.svg" alt="Heartbeat Sequence">
+<img src="{{ site.url }}{{ site.base_image_path }}posts/design/heartbeat-sequence.svg" alt="Heartbeat Sequence">
 
 ### Quorum 
 
@@ -63,7 +63,7 @@ Another block of the broadcast data, is the index of the last log entry in the c
 - If the candidate's log is at least as complete as the node's log:
     - Grant the vote.
 
-<img src="{{ site.url }}{{ site.base_image_path }}election-sequence.svg" alt="Election Sequence">
+<img src="{{ site.url }}{{ site.base_image_path }}posts/design/election-sequence.svg" alt="Election Sequence">
 
 ### Thanks, bye!
 

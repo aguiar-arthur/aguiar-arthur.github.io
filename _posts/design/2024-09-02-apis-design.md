@@ -5,6 +5,8 @@ date:   2024-09-02 23:50:00
 categories: ["Design"]
 ---
 
+{% include coderay.html %}
+
 Okay, okay, everything depends. But try to forget about it for a while, try to be more material. Doing this maybe you will be a better developer.
 
 ### API hierarchy
