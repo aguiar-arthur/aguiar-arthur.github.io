@@ -1,0 +1,19 @@
+{% assign list_items = include.items | default: nil %}
+{% assign list_class = include.class | default: 'list' %}
+{% assign item_class = include.item_class | default: '' %}
+{% assign list_style = include.list_style | default: 'margin: 0.75rem 0 0; padding-left: 1.25rem;' %}
+{% assign item_style = include.item_style | default: 'margin-bottom: 0.45rem;' %}
+
+{% if list_items and list_items != empty %}
+  <ul class="{{ list_class }}" style="{{ list_style }}">
+    {% for item in list_items %}
+      <li class="{{ item_class }}" style="{{ item_style }}">
+        {% if item.url %}
+          <a href="{{ item.url }}">{{ item.title }}</a>
+        {% else %}
+          {{ item.title }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

@@ -11,9 +11,8 @@ permalink: /about/
         and languages that almost no one cares about.
         Here I talk about mathematics and computer science.
     </p>
-    <ul>
-        <li><a href="https://github.com/aguiar-arthur">My Github</a></li>
-        <li><a href="https://www.linkedin.com/in/aguiar-arthur">My LinkedIn</a></li>
-        <li><a href="mailto:aguiar99arthur@proton.me">Send an Email</a></li>
-    </ul>
+    {% include list.html items=site.data.social_links
+        list_style='margin: 0.75rem 0 0; padding-left: 1.25rem;'
+        item_style='margin-bottom: 0.45rem;'
+    %}
 </div>

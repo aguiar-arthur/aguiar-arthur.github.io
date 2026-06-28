@@ -34,6 +34,19 @@ layout: default
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
+        section {
+            margin-bottom: 1.5rem;
+        }
+        ul {
+            margin: 0.5rem 0 0;
+            padding-left: 1.25rem;
+        }
+        li {
+            margin-bottom: 0.45rem;
+        }
+        li:last-child {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -44,7 +57,7 @@ layout: default
             <a href="{{ "/posts/principal" | relative_url }}" aria-current="page">Posts</a>
             <a href="{{ "/annotations/principal" | relative_url }}">Annotations</a>
             <a href="{{ "/books/principal" | relative_url }}">Books</a>
-            <a href="{{ "/about/" | relative_url }}">About</a>
+            <a href="{{ "/about/" | relative_url }}">About me</a>
         </nav>
     </header>
     <main id="content">
