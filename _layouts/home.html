@@ -37,16 +37,6 @@ layout: default
         section {
             margin-bottom: 1.5rem;
         }
-        ul {
-            margin: 0.5rem 0 0;
-            padding-left: 1.25rem;
-        }
-        li {
-            margin-bottom: 0.45rem;
-        }
-        li:last-child {
-            margin-bottom: 0;
-        }
     </style>
 </head>
 <body>
@@ -63,38 +53,32 @@ layout: default
     <main id="content">
         <section>
             <h2>Latest Posts</h2>
-            <ul>
-                {% assign regular_posts = '' | split: '' %}
-                {% for post in site.posts %}
-                    {% unless post.path contains 'annotations' %}
-                        {% assign regular_posts = regular_posts | push: post %}
-                    {% endunless %}
-                {% endfor %}
-                {% for post in regular_posts limit:5 %}
-                    <li>
-                        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
+            {% assign regular_posts = '' | split: '' %}
+            {% for post in site.posts %}
+                {% unless post.path contains 'annotations' %}
+                    {% assign regular_posts = regular_posts | push: post %}
+                {% endunless %}
+            {% endfor %}
+            {% assign regular_posts = regular_posts | slice: 0, 5 %}
+            {% include list.html items=regular_posts %}
         </section>
         <section>
             <h2>Latest Annotations</h2>
-            <ul>
-                {% assign annotation_posts = site.annotations %}
-                {% if annotation_posts and annotation_posts != empty %}
-                    {% assign annotation_posts = annotation_posts | sort: "date" | reverse %}
-                {% else %}
-                    {% assign annotation_posts = site.posts | where_exp: "post", "post.path contains '_posts/annotations'" | sort: "date" | reverse %}
-                {% endif %}
+            {% assign annotation_posts = site.annotations %}
+            {% if annotation_posts and annotation_posts != empty %}
+                {% assign annotation_posts = annotation_posts | sort: "date" | reverse %}
+            {% else %}
+                {% assign annotation_posts = site.posts | where_exp: "post", "post.path contains '_posts/annotations'" | sort: "date" | reverse %}
+            {% endif %}
 
-                {% if annotation_posts and annotation_posts != empty %}
-                    {% for post in annotation_posts limit:3 %}
-                        <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-                    {% endfor %}
-                {% else %}
-                    <li>No annotations yet.</li>
-                {% endif %}
-            </ul>
+            {% if annotation_posts and annotation_posts != empty %}
+                {% assign annotation_posts = annotation_posts | slice: 0, 3 %}
+                {% include list.html items=annotation_posts %}
+            {% else %}
+                <ul style="margin: 0.75rem 0 0; padding-left: 1.25rem;">
+                    <li style="margin-bottom: 0.45rem;">No annotations yet.</li>
+                </ul>
+            {% endif %}
         </section>
     </main>
     <footer>
