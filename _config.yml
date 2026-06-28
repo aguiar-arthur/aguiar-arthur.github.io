@@ -55,9 +55,6 @@ collections:
   books:
     output: true
     permalink: /books/:path/
-  calligraphy:
-    output: true
-    permalink: /calligraphy/:path/
 
 defaults:
   - scope:
@@ -73,11 +70,6 @@ defaults:
   - scope:
       path: ""
       type: "books"
-    values:
-      layout: post
-  - scope:
-      path: ""
-      type: "calligraphy"
     values:
       layout: post
 
