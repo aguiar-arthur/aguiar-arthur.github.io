@@ -1,6 +1,6 @@
 ---
 layout: post
-ritle:  "Pre Calculus Review"
+title:  "Pre Calculus Review"
 date:   2025-08-10 10:00:00
 categories: ["Mathematics"]
 tags: ["Pre Calculus"]

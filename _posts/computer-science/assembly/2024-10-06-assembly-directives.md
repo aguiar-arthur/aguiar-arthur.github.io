@@ -6,8 +6,6 @@ categories: ["Computer Science"]
 tags: ["Assembly"]
 ---
 
-{% include coderay.html %}
-
 Assembler directives are instructions to the assembler. They provide guidance on how to process code, organize memory, and manage resources. They do not produce machine code that gets executed.
 
 All the assembly code used here is **X86.**

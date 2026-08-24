@@ -1,14 +1,15 @@
-<!-- _includes/pdf-viewer.html -->
-<div class="pdf-container">
-  <!-- Open in New Tab Button -->
-  <div style="margin-bottom: 10px;">
-    <a href="{{ include.file }}" target="_blank" rel="noopener noreferrer" style="
-      display: inline-block;
-      padding: 8px 16px;
-      border: 2px solid #000;
-      text-decoration: none;
-      color: inherit;
-      font-weight: bold;
-    ">Open PDF in New Tab</a>
+{% assign pdf_url = include.file | relative_url %}
+{% assign pdf_height = include.height | default: "800px" %}
+{% assign pdf_title = include.title | default: "PDF document" %}
+
+<div class="pdf-viewer">
+  <div class="pdf-viewer__open-card">
+    <a href="{{ pdf_url }}" target="_blank" rel="noopener noreferrer">Open the PDF in a new tab</a>
   </div>
+  <object data="{{ pdf_url }}" type="application/pdf" width="100%" height="{{ pdf_height }}" aria-label="{{ pdf_title }}">
+    <p>
+      Your browser cannot display this PDF.
+      <a href="{{ pdf_url }}" target="_blank" rel="noopener noreferrer">Open {{ pdf_title }} in a new tab</a>.
+    </p>
+  </object>
 </div>

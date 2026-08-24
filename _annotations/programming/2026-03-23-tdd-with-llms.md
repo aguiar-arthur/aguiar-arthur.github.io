@@ -6,4 +6,4 @@ categories: ["Programming"]
 tags: ["AI"]
 ---
 
-<img width="600" src="{{ site.url }}{{ site.base_image_path }}/annotations/programming/2026-03-23-tdd-tests-with-llm.jpeg" alt="handwriten annotation tdd and llm's">
+<img width="600" src="{{ '/assets/images/annotations/programming/2026-03-23-tdd-tests-with-llm.jpeg' | relative_url }}" alt="handwriten annotation tdd and llm's">

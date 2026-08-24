@@ -12,10 +12,8 @@ published at `https://aguiar-arthur.github.io`.
 - `no-style-please` supplies the base theme and layouts.
 - `jekyll-feed` generates the feed.
 - Markdown is rendered by Kramdown with GitHub Flavored Markdown input.
-- Code blocks are highlighted with CodeRay through
-  `kramdown-syntax-coderay`; its stylesheet lives at
-  `assets/css/coderay.css` and can be included with
-  `{% include coderay.html %}`.
+- Code blocks are highlighted with Rouge. Its stylesheet is loaded globally
+  from `assets/css/rouge.css` by the local head include.
 - Mathematical notation is rendered client-side by MathJax. Add
   `{% include mathjax.html %}` to a page that uses TeX math such as `$$...$$`.
 
@@ -40,7 +38,7 @@ Jekyll does not reload that file automatically.
 | `assets/pdfs/` | Source PDFs for annotations. This directory is published as static files. |
 | `assets/images/posts/` | Images used by regular posts. |
 | `assets/images/annotations/` | Images used by annotations. |
-| `_includes/` | Reusable Liquid snippets, including the PDF, MathJax, CodeRay, warning, and list includes. |
+| `_includes/` | Reusable Liquid snippets, including the PDF, MathJax, warning, list, and head includes. |
 | `_layouts/` | Site-specific layouts; `home.html` is used by the landing page. |
 | `_data/` | YAML data used by templates, currently social links. |
 | `posts/`, `annotations/`, `books/` | Index, category, and tag pages for the corresponding content streams. |
@@ -119,11 +117,11 @@ Link or display the PDF from its annotation with the shared include:
 {% include pdf-viewer.html file="/assets/pdfs/cdi_one/functions_introduction.pdf" height="800px" %}
 ```
 
-`pdf-viewer.html` currently renders an **Open PDF in New Tab** link. Its
-`height` argument is accepted by existing content but is not used by the
-include, so do not expect it to change the output unless the include is updated.
-Use a site-root-relative path beginning with `/assets/pdfs/`; this keeps the
-generated link correct for the configured empty `baseurl`.
+`pdf-viewer.html` embeds the PDF responsively and provides an **Open PDF in New
+Tab** fallback link. Its optional `height` argument controls the embedded
+viewer height and defaults to `800px`. Use a site-root-relative path beginning
+with `/assets/pdfs/`; `relative_url` keeps the generated links correct if the
+site later uses a non-empty `baseurl`.
 
 Keep the Markdown annotation and its PDF together conceptually: when renaming
 or moving one, update the other and update the Liquid include path. There is no
@@ -136,6 +134,6 @@ automatic filename mapping or validation between them.
   descriptive tag values.
 - Use `relative_url` for internal template links, as the existing index pages
   do.
-- Keep custom styling minimal and theme-compatible; shared CodeRay styling
-  belongs in `assets/css/coderay.css`.
+- Keep custom styling minimal and theme-compatible; shared site and syntax
+  styles live in `assets/css/site.css` and `assets/css/rouge.css`.
 - Do not hand-edit generated files in `_site/`; rebuild instead.

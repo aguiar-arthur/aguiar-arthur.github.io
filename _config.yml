@@ -41,9 +41,7 @@ plugins:
 markdown: kramdown
 kramdown:
   input: GFM # For GitHub Flavored Markdown
-  syntax_highlighter: coderay
-coderay:
-  coderay_css: class
+  syntax_highlighter: rouge
 
 collections:
   posts:

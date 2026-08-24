@@ -1,45 +1,8 @@
 ---
 layout: default
 ---
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page.title | default: site.title }}</title>
-    <style>
-        .border-box {
-            border: 2px solid black; 
-            padding: 5px 10px; 
-            margin: 10px 0; 
-        }
-        .skip-link {
-            position: absolute;
-            left: -999px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-        .skip-link:focus {
-            position: static;
-            width: auto;
-            height: auto;
-            padding: 8px;
-            background: #000;
-            color: #fff;
-            z-index: 1000;
-        }
-        a:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
-        }
-        section {
-            margin-bottom: 1.5rem;
-        }
-    </style>
-</head>
-<body>
+
+<div class="home-page" lang="pt-BR">
     <a class="skip-link" href="#content">Skip to content</a>
     <header>
         <h1>{{ site.title }}</h1>
@@ -84,5 +47,4 @@ layout: default
     <footer>
         <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
     </footer>
-</body>
-</html>
+</div>

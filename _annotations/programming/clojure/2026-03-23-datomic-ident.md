@@ -6,5 +6,4 @@ categories: ["Programming"]
 tags: ["Clojure"]
 ---
 
-<img width="600" src="{{ site.url }}{{ site.base_image_path }}annotations/programming/clojure/2026-03-23-datomic-ident.jpeg" alt="handwriten annotation about datomic ident">
-
+<img width="600" src="{{ '/assets/images/annotations/programming/clojure/2026-03-23-datomic-ident.jpeg' | relative_url }}" alt="handwriten annotation about datomic ident">

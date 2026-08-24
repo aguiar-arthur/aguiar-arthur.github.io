@@ -1,6 +1,6 @@
 ---
 layout: post
-ritle:  "Lateral Limits"
+title:  "Lateral Limits"
 date:   2025-08-17 20:10:00
 categories: ["Mathematics"]
 tags: ["CDI one"]

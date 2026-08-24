@@ -1,6 +1,6 @@
 ---
 layout: post
-ritle:  "Limit Properties"
+title:  "Limit Properties"
 date:   2025-08-17 20:30:00
 categories: ["Mathematics"]
 tags: ["CDI one"]

@@ -6,4 +6,4 @@ categories: ["Mathematics"]
 tags: ["Numeric Calculus"]
 ---
 
-<img width="600" src="{{ site.url }}{{ site.base_image_path }}/annotations/numeric_calculus/2026-03-23-floating-point.jpeg" alt="handwriten annotation about floating point">
+<img width="600" src="{{ '/assets/images/annotations/numeric_calculus/2026-03-23-floating-point.jpeg' | relative_url }}" alt="handwriten annotation about floating point">

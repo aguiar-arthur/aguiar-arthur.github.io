@@ -1,6 +1,6 @@
 ---
 layout: post
-ritle:  "Limits - Exercises One"
+title:  "Limits - Exercises One"
 date:   2025-08-25 07:30:00
 categories: ["Mathematics"]
 tags: ["CDI one"]
