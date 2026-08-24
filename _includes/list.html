@@ -3,9 +3,9 @@
 {% assign item_class = include.item_class | default: '' %}
 
 {% if list_items and list_items != empty %}
-  <ul class="{{ list_class }}" style="margin: 0.75rem 0 0; padding-left: 1.25rem;">
+  <ul class="list {{ list_class }}">
     {% for item in list_items %}
-      <li class="{{ item_class }}" style="margin-bottom: 0.45rem;">
+      <li class="list__item {{ item_class }}">
         {% if item.url %}
           <a href="{{ item.url }}">{{ item.title }}</a>
         {% else %}

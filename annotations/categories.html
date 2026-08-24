@@ -3,19 +3,29 @@ layout: post
 title: Categories
 permalink: /annotations/categories/
 ---
-<ul>
-  {% for category in site.categories %}
-    {% assign filtered_posts = category[1] | where_exp: "post", "post.collection == 'annotations'" %}
-    {% if filtered_posts.size > 0 %}
-      <li>
-        <h2>{{ category[0] }}</h2>
-        <ul>
-          {% for post in filtered_posts %}
+{% assign annotation_posts = site.annotations | sort: "date" | reverse %}
+{% assign annotation_categories = "" | split: "" %}
+
+{% for post in annotation_posts %}
+  {% for category in post.categories %}
+    {% unless annotation_categories contains category %}
+      {% assign annotation_categories = annotation_categories | push: category %}
+    {% endunless %}
+  {% endfor %}
+{% endfor %}
+
+{% assign annotation_categories = annotation_categories | sort %}
+<ul class="taxonomy-list">
+  {% for category_name in annotation_categories %}
+    <li>
+      <h2>{{ category_name }}</h2>
+      <ul>
+        {% for post in annotation_posts %}
+          {% if post.categories contains category_name %}
             <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-            <br>
-          {% endfor %}
-        </ul>
-      </li>
-    {% endif %}
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </li>
   {% endfor %}
 </ul>

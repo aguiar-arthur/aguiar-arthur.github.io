@@ -3,7 +3,7 @@ layout: post
 title: Tags
 permalink: /posts/tags/
 ---
-<ul>
+<ul class="taxonomy-list">
   {% for tag in site.tags %}
     {% assign filtered_posts = '' | split: '' %}
     {% for post in tag[1] %}

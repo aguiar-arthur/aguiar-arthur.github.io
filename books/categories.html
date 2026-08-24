@@ -3,7 +3,7 @@ layout: post
 title: Books Categories
 permalink: /books/categories/
 ---
-<ul>
+<ul class="taxonomy-list">
   {% assign all_books = site.books %}
   {% assign book_categories = '' | split: '' %}
   {% for post in all_books %}
@@ -20,7 +20,6 @@ permalink: /books/categories/
         <ul>
           {% for post in filtered_posts %}
             <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-            <br>
           {% endfor %}
         </ul>
       </li>

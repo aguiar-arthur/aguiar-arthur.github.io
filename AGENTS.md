@@ -38,7 +38,8 @@ Jekyll does not reload that file automatically.
 | `assets/pdfs/` | Source PDFs for annotations. This directory is published as static files. |
 | `assets/images/posts/` | Images used by regular posts. |
 | `assets/images/annotations/` | Images used by annotations. |
-| `_includes/` | Reusable Liquid snippets, including the PDF, MathJax, warning, list, and head includes. |
+| `_includes/` | Reusable Liquid snippets, including the PDF, MathJax, warning, list, content-index, and head includes. |
+| `assets/js/content-index.js` | Client-side search and 10-item pagination for the three principal collection indexes. |
 | `_layouts/` | Site-specific layouts; `home.html` is used by the landing page. |
 | `_data/` | YAML data used by templates, currently social links. |
 | `posts/`, `annotations/`, `books/` | Index, category, and tag pages for the corresponding content streams. |
@@ -69,7 +70,9 @@ configured post URLs are:
 ```
 
 Posts are listed on `posts/principal.html`; the tag and category pages live in
-the same `posts/` directory.
+the same `posts/` directory. The principal page uses
+`_includes/content-index.html`, which displays 10 items per page and filters
+title, date, category, and tag text through `assets/js/content-index.js`.
 
 ### Annotations
 
@@ -87,7 +90,8 @@ Annotations render to:
 ```
 
 They are listed by `annotations/principal.html` and are sorted there by date,
-newest first.
+newest first. The list is paginated and searchable through the shared
+content-index component.
 
 ### Book notes
 
@@ -98,7 +102,8 @@ filename convention. Book pages render to:
 /books/<source path without extension>/
 ```
 
-They are listed by `books/principal.html`, sorted newest first.
+They are listed by `books/principal.html`, sorted newest first, with the same
+10-item pagination and search behavior as posts and annotations.
 
 ## PDFs and annotations
 

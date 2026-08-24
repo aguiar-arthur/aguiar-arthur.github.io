@@ -11,13 +11,5 @@ permalink: /posts/principal/
   </nav>
 </header>
 
-<ul>
-  {% for post in site.posts %}
-    {% unless post.path contains 'annotations' or post.path contains 'books' %}
-      <li>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        <p>{{ post.date | date: "%B %d, %Y" }}</p>
-      </li>
-    {% endunless %}
-  {% endfor %}
-</ul>
+{% assign regular_posts = site.posts | sort: "date" | reverse %}
+{% include content-index.html items=regular_posts id="posts" %}

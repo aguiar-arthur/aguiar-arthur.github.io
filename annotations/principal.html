@@ -11,14 +11,5 @@ permalink: /annotations/principal/
   </nav>
 </header>
 
-<br>
-
-<ul>
-  {% assign annotation_posts = site.annotations | sort: "date" | reverse %}
-  {% for post in annotation_posts %}
-    <li>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-      <p>{{ post.date | date: "%B %d, %Y" }}</p>
-    </li>
-  {% endfor %}
-</ul>
+{% assign annotation_posts = site.annotations | sort: "date" | reverse %}
+{% include content-index.html items=annotation_posts id="annotations" %}

@@ -1,0 +1,42 @@
+{% assign index_items = include.items | default: empty %}
+{% assign index_empty_message = include.empty_message | default: "No items available yet." %}
+
+<div class="content-index" data-per-page="10">
+  <label class="content-index__search-label" for="content-search-{{ include.id }}">Search</label>
+  <input
+    class="content-index__search"
+    id="content-search-{{ include.id }}"
+    type="search"
+    placeholder="Search by title, date, category, or tag"
+    autocomplete="off"
+    data-index-search>
+
+  <ul class="content-index__list" data-index-list>
+    {% if index_items and index_items != empty %}
+      {% for item in index_items %}
+        {% capture search_text %}
+          {{ item.title }}
+          {{ item.date | date: "%B %d, %Y" }}
+          {% if item.categories %}{{ item.categories | join: " " }}{% endif %}
+          {% if item.tags %}{{ item.tags | join: " " }}{% endif %}
+        {% endcapture %}
+        <li data-index-item data-search="{{ search_text | strip | downcase | escape }}">
+          <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+          <p>{{ item.date | date: "%B %d, %Y" }}</p>
+        </li>
+      {% endfor %}
+    {% else %}
+      <li data-index-empty>{{ index_empty_message }}</li>
+    {% endif %}
+  </ul>
+
+  <p class="content-index__no-results" data-index-no-results hidden>No matching items found.</p>
+
+  <nav class="content-index__pagination" aria-label="Pagination" data-index-pagination hidden>
+    <button type="button" data-index-previous>Previous</button>
+    <span data-index-status></span>
+    <button type="button" data-index-next>Next</button>
+  </nav>
+</div>
+
+<script src="{{ '/assets/js/content-index.js' | relative_url }}" defer></script>

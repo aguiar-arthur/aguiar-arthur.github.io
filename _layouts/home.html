@@ -38,8 +38,8 @@ layout: default
                 {% assign annotation_posts = annotation_posts | slice: 0, 3 %}
                 {% include list.html items=annotation_posts %}
             {% else %}
-                <ul style="margin: 0.75rem 0 0; padding-left: 1.25rem;">
-                    <li style="margin-bottom: 0.45rem;">No annotations yet.</li>
+                <ul class="list">
+                    <li class="list__item">No annotations yet.</li>
                 </ul>
             {% endif %}
         </section>

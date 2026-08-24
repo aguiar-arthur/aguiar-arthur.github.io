@@ -11,18 +11,5 @@ permalink: /books/principal/
   </nav>
 </header>
 
-<br>
-
-<ul>
-  {% assign books = site.books | sort: "date" | reverse %}
-  {% if books and books != empty %}
-    {% for post in books %}
-      <li>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        <p>{{ post.date | date: "%B %d, %Y" }}</p>
-      </li>
-    {% endfor %}
-  {% else %}
-    <li>No books available yet.</li>
-  {% endif %}
-</ul>
+{% assign books = site.books | sort: "date" | reverse %}
+{% include content-index.html items=books id="books" empty_message="No books available yet." %}
