@@ -21,8 +21,6 @@ Referências:
 MARCONDES, Danilo — *Iniciação à História da Filosofia*  
 HESSEN, Johannes — *Teoria do Conhecimento*
 
----
-
 Philosophical knowledge is a form of knowledge based on rational reflection and critical investigation of the foundations of reality and of human knowledge itself. Rather than merely describing facts or accepting traditional ideas, philosophy seeks to understand the principles that make knowledge possible and investigates fundamental concepts such as truth, existence, reality, reason, and knowledge.
 
 An essential characteristic of philosophy is its reflective nature. Philosophy is not limited to studying the external world; it also examines the very act of knowing. In this way, knowledge itself becomes an object of philosophical investigation, especially in the field called epistemology, which studies the conditions, possibilities, and limits of human knowledge.
@@ -32,8 +30,6 @@ Philosophical knowledge develops mainly through conceptual analysis and rational
 Referências:  
 HESSEN, Johannes — *Teoria do Conhecimento*  
 MARCONDES, Danilo — *Iniciação à História da Filosofia*
-
----
 
 # Method and Characteristics of Philosophical Knowledge
 
@@ -75,8 +71,6 @@ He expressed this attitude in the famous statement:
 Referências:  
 CHAUI, Marilena — *Convite à Filosofia*  
 SEVERINO, Antônio Joaquim — *Metodologia do Trabalho Científico*
-
----
 
 # The Role of Philosophical Knowledge
 

@@ -21,6 +21,29 @@ body {
   color: var(--site-color);
   background: var(--site-background);
   font-family: monospace;
+  line-height: 1.5;
+}
+
+/* The theme uses a fixed line height, which is too tight for wrapped headings. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+/* Keep long MathJax display equations usable on narrow screens. */
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .home-page .skip-link {
