@@ -1,7 +1,11 @@
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: Build and deploy Jekyll site
 
 on:
   push:
+    branches:
+      - main
+
+  pull_request:
     branches:
       - main
 
@@ -22,34 +26,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'  # Specify the Ruby version for the Jekyll build
-
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install  # This installs Jekyll and any other dependencies in your Gemfile
+          ruby-version: .ruby-version
+          bundler-cache: true
 
       - name: Build with Jekyll
-        run: |
-          bundle exec jekyll build --source ./ --destination ./_site  # Build the Jekyll site
+        run: bundle exec jekyll build --source ./ --destination ./_site
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: ./_site  # Upload the site files as an artifact
+          path: ./_site
 
   # Deployment job
   deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}  # URL of the deployed site
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build  # Ensure this job runs after the build job
+    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
