@@ -1,8 +1,10 @@
 # Repository guide
 
 This repository is Arthur Aguiar's personal blog, built as a static site with
-Jekyll. It uses the `no-style-please` theme with a dark appearance and is
+Jekyll. It uses the `no-style-please` theme (light and dark follow the visitor's system) and is
 published at `https://aguiar-arthur.github.io`.
+
+Detailed component, layout, papers and asset documentation is in [`docs/`](docs/README.md).
 
 ## Tooling and libraries
 
@@ -17,12 +19,13 @@ published at `https://aguiar-arthur.github.io`.
 - Mathematical notation is rendered client-side by MathJax. Add
   `{% include mathjax.html %}` to a page that uses TeX math such as `$$...$$`.
 
-Useful local commands:
+Useful local commands (run them from the repository root):
 
 ```sh
 bundle install
 bundle exec jekyll serve
 bundle exec jekyll build
+ruby bin/check-content   # validates front matter, references and taxonomy
 ```
 
 Changing `_config.yml` requires restarting `bundle exec jekyll serve` because
@@ -35,22 +38,30 @@ Jekyll does not reload that file automatically.
 | `_posts/` | Long-form blog posts, organized by subject. |
 | `_annotations/` | Study notes and exercise annotations, organized by course/topic. |
 | `_books/` | Notes and reviews about books, organized by subject. |
+| `_papers/` | Grouped documents: `_papers/<group>/index.md` (layout `group`) plus the group's PDFs. |
 | `assets/pdfs/` | Source PDFs for annotations. This directory is published as static files. |
 | `assets/images/posts/` | Images used by regular posts. |
 | `assets/images/annotations/` | Images used by annotations. |
 | `_includes/` | Reusable Liquid snippets, including the PDF, MathJax, warning, list, content-index, and head includes. |
 | `assets/js/content-index.js` | Client-side search and 10-item pagination for the three principal collection indexes. |
-| `_layouts/` | Site-specific layouts; `home.html` is used by the landing page. |
+| `_layouts/` | `default`, `post`, `home` and `group` (local; they replace the theme's). |
 | `_data/` | YAML data used by templates, currently social links. |
-| `posts/`, `annotations/`, `books/` | Index, category, and tag pages for the corresponding content streams. |
+| `posts/`, `annotations/`, `books/`, `papers/` | Index, category, and tag pages for the corresponding content streams. |
 | `_config.yml` | Site metadata, collection behavior, Markdown settings, and permalinks. |
+| `docs/` | Project documentation; excluded from the published site. |
+| `bin/check-content` | Content validator (Ruby, standard library); also run in CI. |
 | `_site/` | Generated output. Treat as build artefacts; edit source files instead. |
 
 ## Content placement and front matter
 
 All content documents use YAML front matter and inherit `layout: post` from
 `_config.yml` (explicitly setting it is fine and common in existing files).
-Use a quoted `title`, a parsable `date`, `categories`, and optional `tags`.
+Use a quoted `title`, a parsable `date`, `categories` (a list), and optional `tags`.
+The date must match the date in the file name. Run `ruby bin/check-content` after editing content; it fails on
+missing fields or references to missing files and warns about inconsistencies.
+
+URLs derive from the file, not from the title: renaming or moving a file (or changing a post's `date`) changes its
+URL and nothing redirects the old one, so do not rename content without a reason.
 
 ### Regular posts
 
@@ -68,6 +79,8 @@ configured post URLs are:
 ```text
 /posts/YYYY/MM/DD/slug/
 ```
+
+The date part comes from the front-matter `date` and `slug` from the file name.
 
 Posts are listed on `posts/principal.html`; the tag and category pages live in
 the same `posts/` directory. The principal page uses
@@ -104,6 +117,27 @@ filename convention. Book pages render to:
 
 They are listed by `books/principal.html`, sorted newest first, with the same
 10-item pagination and search behavior as posts and annotations.
+
+### Papers
+
+`papers/principal.html` lists the paper groups; opening one shows the group page
+(`_layouts/group.html`): language banner (when `lang` is not `en`), the `description`
+text, and a list of documents built by `_includes/file-list.html`.
+
+```text
+_papers/monads/index.md   # layout: group, permalink: /papers/monads/
+_papers/monads/*.pdf      # listed only if declared in the front matter `files:`
+```
+
+```yaml
+files:
+  - file: "document.pdf"
+    title: "Display title"
+```
+
+Only the declared files are listed, in the declared order.
+
+The layout and include are generic and can be reused for other folder-of-documents pages.
 
 ## PDFs and annotations
 

@@ -37,8 +37,13 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Check content
+        run: ruby bin/check-content
+
       - name: Build with Jekyll
         run: bundle exec jekyll build --source ./ --destination ./_site
+        env:
+          JEKYLL_ENV: production
 
       - name: Upload artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

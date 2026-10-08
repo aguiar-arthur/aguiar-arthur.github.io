@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Discrete Mathematics - List One"
-date:   2025-07-26 20:00:00
+date:   2025-07-29 20:00:00
 categories: ["Mathematics"]
 tags: ["Algebra"]
 ---

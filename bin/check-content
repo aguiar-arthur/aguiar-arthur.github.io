@@ -1,0 +1,119 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Validates the blog content without building it. Standard library only.
+#
+#   ruby bin/check-content
+#
+# Errors (exit status 1) break the build in CI: missing/invalid front matter,
+# missing title/date/categories, and references to files that do not exist.
+# Warnings are advisory: unknown front-matter keys, date vs. file name mismatch,
+# inconsistent category/tag spelling, unreferenced assets, math without MathJax,
+# images without alt text, PDFs in a group folder that are not declared.
+
+require "yaml"
+require "date"
+require "time"
+
+Dir.chdir(File.expand_path("..", __dir__))
+
+COLLECTIONS = %w[_posts _annotations _books _papers].freeze
+KNOWN_KEYS = %w[layout title date categories tags description lang permalink files].freeze
+ASSET_PATH = %r{/assets/[^\s"'<>)\]]+}.freeze
+
+errors = []
+warnings = []
+referenced = []
+taxonomy = { "category" => Hash.new { |h, k| h[k] = [] }, "tag" => Hash.new { |h, k| h[k] = [] } }
+
+docs = COLLECTIONS.flat_map { |dir| Dir.glob("#{dir}/**/*.{md,markdown}") }.sort
+
+docs.each do |file|
+  raw = File.read(file, encoding: "UTF-8")
+  match = raw.match(/\A---\s*\n(.*?)\n---\s*\n?(.*)\z/m)
+  unless match
+    errors << "#{file}: missing front matter"
+    next
+  end
+
+  begin
+    data = YAML.safe_load(match[1], permitted_classes: [Date, Time], aliases: false) || {}
+  rescue StandardError => e
+    errors << "#{file}: invalid YAML front matter (#{e.message.lines.first.strip})"
+    next
+  end
+  body = match[2]
+  group = data["layout"] == "group"
+
+  errors << "#{file}: missing title" if data["title"].to_s.strip.empty?
+  if data["date"].nil?
+    errors << "#{file}: missing date"
+  elsif !(data["date"].is_a?(Time) || data["date"].is_a?(Date))
+    errors << "#{file}: unparsable date #{data['date'].inspect}"
+  end
+
+  unless group
+    categories = data["categories"]
+    if categories.nil? || Array(categories).empty?
+      errors << "#{file}: missing categories"
+    elsif !categories.is_a?(Array)
+      warnings << "#{file}: categories should be a list (categories: [\"#{categories}\"])"
+    end
+  end
+
+  (data.keys - KNOWN_KEYS).each { |key| warnings << "#{file}: unknown front matter key '#{key}'" }
+
+  Array(data["categories"]).each { |c| taxonomy["category"][c.to_s.downcase] << c.to_s }
+  Array(data["tags"]).each { |t| taxonomy["tag"][t.to_s.downcase] << t.to_s }
+
+  if (name = File.basename(file).match(/\A(\d{2,4})-(\d\d)-(\d\d)-/)) && data["date"].respond_to?(:strftime)
+    year = name[1].length == 2 ? "20#{name[1]}" : name[1]
+    unless [year, name[2], name[3]] == data["date"].strftime("%Y-%m-%d").split("-")
+      warnings << "#{file}: date #{data['date'].strftime('%Y-%m-%d')} differs from the file name"
+    end
+  end
+
+  (body + match[1]).scan(ASSET_PATH).each do |path|
+    path = path.sub(/[.,;]+\z/, "")
+    referenced << path
+    errors << "#{file}: references missing file #{path}" unless File.exist?(path.delete_prefix("/"))
+  end
+
+  if group
+    declared = []
+    Array(data["files"]).each do |entry|
+      name = entry.is_a?(Hash) ? entry["file"] : entry
+      path = name.to_s.start_with?("/") ? name.delete_prefix("/") : File.join(File.dirname(file), name.to_s)
+      declared << File.expand_path(path)
+      errors << "#{file}: declared document #{name} does not exist" unless File.exist?(path)
+    end
+    Dir.glob(File.join(File.dirname(file), "*.pdf")).each do |pdf|
+      warnings << "#{pdf}: not declared in #{file} (it will not be listed)" unless declared.include?(File.expand_path(pdf))
+    end
+  else
+    math = body.match?(/\$\$|\\\(|\\\[/)
+    include_mathjax = body.include?("mathjax.html")
+    warnings << "#{file}: uses math but does not include mathjax.html" if math && !include_mathjax
+    warnings << "#{file}: includes mathjax.html but has no math" if include_mathjax && !math
+    warnings << "#{file}: <img> without alt text" if body.match?(/<img(?![^>]*\balt=)[^>]*>/)
+  end
+end
+
+# Spelling variants of the same category/tag (case-insensitive duplicates).
+taxonomy.each do |kind, groups|
+  groups.each_value do |spellings|
+    variants = spellings.uniq
+    warnings << "#{kind} spelled inconsistently: #{variants.map(&:inspect).join(', ')}" if variants.size > 1
+  end
+end
+
+# Assets that no document, layout or include points to.
+(Dir.glob("_layouts/*") + Dir.glob("_includes/*")).each { |f| referenced.concat(File.read(f).scan(ASSET_PATH)) }
+Dir.glob("assets/{pdfs,images}/**/*").select { |f| File.file?(f) }.each do |asset|
+  warnings << "#{asset}: not referenced anywhere" unless referenced.include?("/#{asset}")
+end
+
+warnings.each { |w| puts "warning: #{w}" }
+errors.each { |e| puts "error:   #{e}" }
+puts "#{docs.size} documents checked: #{errors.size} error(s), #{warnings.size} warning(s)"
+exit(errors.empty? ? 0 : 1)

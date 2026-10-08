@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Linear Algebra - Vector Spaces"
-date:   2025-09-29 10:00:00
+date:   2025-09-30 10:00:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]
 ---

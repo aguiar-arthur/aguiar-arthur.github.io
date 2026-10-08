@@ -1,0 +1,8 @@
+---
+layout: post
+title: All Papers
+permalink: /papers/principal/
+---
+
+{% assign paper_groups = site.papers | where: "layout", "group" | sort: "date" | reverse %}
+{% include content-index.html items=paper_groups id="papers" empty_message="No papers available yet." %}

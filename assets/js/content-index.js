@@ -2,6 +2,10 @@
   "use strict";
 
   function initializeIndex(index) {
+    // The include may load this script more than once; never wire an index twice.
+    if (index.dataset.indexReady === "true") return;
+    index.dataset.indexReady = "true";
+
     var list = index.querySelector("[data-index-list]");
     var search = index.querySelector("[data-index-search]");
     var pagination = index.querySelector("[data-index-pagination]");

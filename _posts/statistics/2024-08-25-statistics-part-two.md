@@ -2,7 +2,7 @@
 layout: post
 title:  "Statistics - Dispersion and probability"
 date:   2024-08-25 23:00:00
-categories: statistics
+categories: ["Statistics"]
 ---
 
 Measures of Dispersion

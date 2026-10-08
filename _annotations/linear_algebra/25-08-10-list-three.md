@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Linear Algebra - list three"
-date:   2025-09-16 10:00:00
+date:   2025-08-10 10:00:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]
 ---

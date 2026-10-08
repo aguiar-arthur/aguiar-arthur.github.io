@@ -1,0 +1,27 @@
+---
+layout: post
+---
+{%- comment -%}
+  Generic "group" page: an index.md that introduces and lists a set of files.
+  Works in any collection (e.g. _papers/monads/index.md, _books/foo/index.md).
+
+  Front matter:
+    title        group title (rendered by the parent layout)
+    description  intro text shown above the file list
+    lang         anything other than "en" shows the language notice banner
+    files        the documents to list, in order: "name.pdf" or { file, title }.
+                 Relative names resolve against the group's URL (PDFs stored
+                 next to index.md); names starting with "/" are used as-is.
+                 Only files declared here are listed.
+{%- endcomment -%}
+{% if page.lang and page.lang != "en" %}
+  {% include warning.html title="About the language" text="This document is in pt-br, there's no translation to english." %}
+{% endif %}
+
+{% if page.description %}
+  <p class="group-intro">{{ page.description }}</p>
+{% endif %}
+
+{{ content }}
+
+{% include file-list.html files=page.files base=page.url %}

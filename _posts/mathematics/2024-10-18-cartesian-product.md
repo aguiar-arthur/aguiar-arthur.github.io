@@ -2,7 +2,7 @@
 layout: post
 title:  "Cartesian Product"
 date:   2024-10-18 22:20:00
-gategories: ["Mathematics"]
+categories: ["Mathematics"]
 tags: ["Graphics"]
 ---
 

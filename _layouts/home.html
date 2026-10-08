@@ -2,48 +2,36 @@
 layout: default
 ---
 
-<div class="home-page" lang="pt-BR">
+<div class="home-page">
     <a class="skip-link" href="#content">Skip to content</a>
     <header>
         <h1>{{ site.title }}</h1>
         <nav aria-label="Main navigation">
-            <a href="{{ "/posts/principal" | relative_url }}" aria-current="page">Posts</a>
+            <a href="{{ "/posts/principal" | relative_url }}">Posts</a>
             <a href="{{ "/annotations/principal" | relative_url }}">Annotations</a>
             <a href="{{ "/books/principal" | relative_url }}">Books</a>
+            <a href="{{ "/papers/principal" | relative_url }}">Papers</a>
             <a href="{{ "/about/" | relative_url }}">About me</a>
         </nav>
     </header>
-    <main id="content">
+    <div id="content">
         <section>
             <h2>Latest Posts</h2>
-            {% assign regular_posts = '' | split: '' %}
-            {% for post in site.posts %}
-                {% unless post.path contains 'annotations' %}
-                    {% assign regular_posts = regular_posts | push: post %}
-                {% endunless %}
-            {% endfor %}
-            {% assign regular_posts = regular_posts | slice: 0, 5 %}
-            {% include list.html items=regular_posts %}
+            {% assign latest_posts = site.posts | slice: 0, 5 %}
+            {% include list.html items=latest_posts %}
         </section>
         <section>
             <h2>Latest Annotations</h2>
-            {% assign annotation_posts = site.annotations %}
-            {% if annotation_posts and annotation_posts != empty %}
-                {% assign annotation_posts = annotation_posts | sort: "date" | reverse %}
-            {% else %}
-                {% assign annotation_posts = site.posts | where_exp: "post", "post.path contains '_posts/annotations'" | sort: "date" | reverse %}
-            {% endif %}
-
-            {% if annotation_posts and annotation_posts != empty %}
-                {% assign annotation_posts = annotation_posts | slice: 0, 3 %}
-                {% include list.html items=annotation_posts %}
+            {% assign latest_annotations = site.annotations | sort: "date" | reverse | slice: 0, 3 %}
+            {% if latest_annotations.size > 0 %}
+                {% include list.html items=latest_annotations %}
             {% else %}
                 <ul class="list">
                     <li class="list__item">No annotations yet.</li>
                 </ul>
             {% endif %}
         </section>
-    </main>
+    </div>
     <footer>
         <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
     </footer>

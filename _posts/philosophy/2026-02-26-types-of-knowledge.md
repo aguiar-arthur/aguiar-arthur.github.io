@@ -2,7 +2,7 @@
 layout: post
 title:  "Types of Knowledge – Philosophy"
 date:   2026-02-26 07:00:00
-categories: ["philosophy"]
+categories: ["Philosophy"]
 ---
 
 Philosophical knowledge is not merely a matter of personal opinion or free reflection. It is a structured form of thinking that requires arguments and rational justification. Instead of expressing arbitrary views, philosophical thinking seeks well-founded explanations supported by logical reasoning.

@@ -7,7 +7,12 @@
     {% for item in list_items %}
       <li class="list__item {{ item_class }}">
         {% if item.url %}
-          <a href="{{ item.url }}">{{ item.title }}</a>
+          {% assign list_item_url = item.url %}
+          {% assign list_item_first = list_item_url | slice: 0 %}
+          {% if list_item_first == "/" %}
+            {% assign list_item_url = list_item_url | relative_url %}
+          {% endif %}
+          <a href="{{ list_item_url }}">{{ item.title }}</a>
         {% else %}
           {{ item.title }}
         {% endif %}

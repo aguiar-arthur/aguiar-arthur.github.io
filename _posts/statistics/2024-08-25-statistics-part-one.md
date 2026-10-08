@@ -2,7 +2,7 @@
 layout: post
 title:  "Statistics - Sampling and tendency"
 date:   2024-08-25 13:00:00
-categories: statistics
+categories: ["Statistics"]
 ---
 
 Often, we learn to use machine learning models without knowing the logic behind them. 

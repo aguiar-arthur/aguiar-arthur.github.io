@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Ratio and Proportions"
-date:   2024-09-20 17:20:00
+date:   2024-09-21 17:20:00
 categories: ["Mathematics"]
 ---
 

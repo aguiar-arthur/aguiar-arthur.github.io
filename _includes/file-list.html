@@ -1,0 +1,43 @@
+{%- comment -%}
+  Renders the documents declared by a group page. Only the entries given in
+  `files` are listed, in the given order; nothing is discovered on disk.
+
+  Parameters:
+    files  list of entries, each a string or { file: "...", title: "..." }
+    base   URL of the group page, used to resolve relative file names
+           (e.g. "/papers/monads/"). Entries starting with "/" are used as-is.
+    ext    extension stripped when a title is derived from the file name (default ".pdf")
+
+  Without a title, the link text is the file name without extension, "-" and
+  "_" turned into spaces, first letter capitalized.
+{%- endcomment -%}
+{% assign fl_ext = include.ext | default: ".pdf" %}
+{% assign fl_base = include.base | default: "/" %}
+
+{% if include.files and include.files.size > 0 %}
+  <ul class="list file-list">
+    {% for entry in include.files %}
+      {% if entry.file %}
+        {% assign fl_name = entry.file %}
+        {% assign fl_title = entry.title %}
+      {% else %}
+        {% assign fl_name = entry %}
+        {% assign fl_title = nil %}
+      {% endif %}
+      {% assign fl_first = fl_name | slice: 0 %}
+      {% if fl_first == "/" %}
+        {% assign fl_url = fl_name | relative_url %}
+      {% else %}
+        {% assign fl_url = fl_base | append: fl_name | relative_url %}
+      {% endif %}
+      {% unless fl_title %}
+        {% assign fl_title = fl_name | split: "/" | last | replace: fl_ext, "" | replace: "-", " " | replace: "_", " " | capitalize %}
+      {% endunless %}
+      <li class="list__item">
+        <a href="{{ fl_url }}" target="_blank" rel="noopener noreferrer">{{ fl_title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No documents yet.</p>
+{% endif %}
