@@ -51,7 +51,8 @@ Jekyll does not reload that file automatically.
 | `pages/` | Standalone pages (`pages/{posts,annotations,books,papers}/` index, category and tag pages, and `pages/about/`). Each declares its own `permalink`. |
 | `_config.yml` | Site metadata, collection behavior, Markdown settings, and permalinks. |
 | `docs/` | Project documentation; excluded from the published site. |
-| `bin/check-content` | Content validator (Ruby, standard library); also run in CI. |
+| `bin/check-content` | Content validator (Ruby, standard library); also run in CI and by the hooks. |
+| `bin/check-site` | html-proofer wrapper for the built `_site/`; runs in CI and the pre-push hook. |
 | `_site/` | Generated output. Treat as build artefacts; edit source files instead. |
 
 ## Content placement and front matter
@@ -143,6 +144,14 @@ Only the declared files are listed, in the declared order. An entry `- divider: 
 heading between documents.
 
 The layout and include are generic and can be reused for other folder-of-documents pages.
+
+## File names
+
+File and folder names in content directories are lowercase without spaces (they become URLs, and Linux is case-sensitive while macOS is not). The git index must also match the disk's case: on macOS use `git mv -f Old new` for case-only renames. `bin/check-content` enforces both. Titles carry the capitalisation instead: they start with a capital, and in `Course - Topic` titles the topic does too (warning).
+
+## Vocabulary and dates
+
+Categories and tags must be listed in `_data/taxonomy.yml`; unknown values fail `bin/check-content`. New files use a 4-digit year in the name (`YYYY-MM-DD-slug.md`); the 28 older `YY-` files are grandfathered in `bin/legacy-short-dates.txt` because renaming changes their URLs.
 
 ## PDFs and annotations
 

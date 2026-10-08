@@ -8,8 +8,8 @@ Detailed documentation lives in `docs/` (components, layouts, papers, assets, co
 
 ## What this is
 
-Arthur Aguiar's personal blog: a static **Jekyll 4.4** site using the remote theme gem
-**`no-style-please`** (light/dark follows the visitor's system), deployed to GitHub Pages at
+Arthur Aguiar's personal blog: a static **Jekyll 4.4** site using the theme gem
+**`no-style-please`** (the theme is light-only; dark mode comes from `assets/css/site.css` and follows the visitor's system), deployed to GitHub Pages at
 `https://aguiar-arthur.github.io`. The site is about programming, mathematics, computer
 science and philosophy. Content is English, except some annotations written in pt-BR.
 
@@ -55,13 +55,14 @@ only excluded from the *published site*. Gems `csv` and `logger` in the Gemfile 
 | `pages/about/index.html` | The About page. |
 | `_layouts/` | `default`, `post`, `home`, `group`: all local (they replace the theme's). `group` is the reusable "folder of documents" page. |
 | `_includes/` | `head.html` (overrides theme head), `content-index.html`, `list.html`, `pdf-viewer.html`, `warning.html`, `mathjax.html`, `file-list.html`. |
-| `assets/css/site.css`, `rouge.css` | Site styles and syntax highlighting; loaded after the theme's `main.css` from `head.html`. |
+| `assets/css/{main.scss,site.css,rouge.css}` | `main.scss` imports the theme Sass with `@use`; `site.css` holds site styles and dark mode; `rouge.css` is syntax highlighting. All loaded from `head.html`. |
 | `assets/js/content-index.js` | Vanilla-JS client-side search + 10-per-page pagination for the three index pages. |
 | `assets/pdfs/<topic>/` | PDFs shown by annotations. Committed as plain binaries (`.gitattributes`: `*.pdf binary`), not Git LFS. |
 | `assets/images/{posts,annotations}/...` | Images, mirroring content topic paths. |
 | `docs/` | Project documentation (excluded from the site via `exclude:` in `_config.yml`). |
-| `bin/check-content` | Ruby validator for content (front matter, references, taxonomy). |
-| `_data/social_links.yml` | Links rendered on the About page. |
+| `bin/check-content`, `bin/check-site` | Content validator (front matter, references, taxonomy, file-name case) and html-proofer wrapper for the built site. |
+| `.githooks/`, `.claude/settings.json` | Git pre-commit/pre-push hooks and the Claude Code PostToolUse hook that run the checks. |
+| `_data/social_links.yml`, `_data/taxonomy.yml` | About-page links; the allowed categories and tags (validator vocabulary). |
 | `404.html`, `index.markdown` | Root pages (`index.markdown` uses `layout: home`; `404.html` must stay at the root). |
 
 ## Collections and URLs (`_config.yml`)
@@ -97,6 +98,9 @@ tags: ["Pre Calculus"]
   enforces this. The front-matter `date` controls displayed date and sort order and must match the date in the
   file name (the validator warns otherwise). Annotation filenames use either `YY-MM-DD-slug.md` (older) or
   `YYYY-MM-DD-slug.md` (newer); prefer the full year. Collection pages show the date under the title.
+- File and folder names are lowercase without spaces (`bin/check-content` fails otherwise); the front-matter `title` carries the capitalisation: titles start with a capital, and in `Course - Topic` titles the topic does too (`List One`, not `list one`); the validator warns otherwise.
+- **Fixed vocabulary:** categories and tags must be listed in `_data/taxonomy.yml`; anything else is a validator error. Add the new entry in the same commit as the document that needs it.
+- New files use a 4-digit year in the name (`2026-03-22-slug.md`); the validator warns on `YY-` names. The 28 existing short-year files are grandfathered in `bin/legacy-short-dates.txt` (renaming changes their URLs); don't add to that list.
 - Categories are capitalised, in a list (`["Mathematics"]`). Reuse existing categories/tags
   (e.g. Mathematics, Computer Science, Programming, Design; tags like "Linear Algebra", "CDI one",
   "Pre Calculus") rather than inventing near-duplicates; the validator warns about spelling variants
@@ -148,6 +152,7 @@ folder-of-documents page (e.g. `_books/<x>/index.md` with `layout: group`). Don'
   `site.annotations`; books and papers are not on the home page.
 - Page URLs must not collide, ignoring case, with root files copied to `_site/` (macOS is case-insensitive); that is why
   `LICENSE` is in `exclude:` next to `/license/`. The validator checks it.
+- File and folder names in content directories must be lowercase without spaces, and the git index must match the disk's case (macOS hides case-only renames from git; fix with `git mv -f Old new`). `bin/check-content` enforces both as errors through the pre-commit and Claude hooks.
 - `head.html` overrides the theme's head (favicon from `site.favicon`, then `main.css`, `rouge.css`,
   `site.css`). Edit carefully; the theme's own `head` is not inherited.
 - The theme (`no-style-please` 0.1.0) is tiny and light-only. Light/dark comes from CSS variables and
@@ -174,4 +179,4 @@ folder-of-documents page (e.g. `_books/<x>/index.md` with `layout: group`). Don'
   `bin/check-site`; it is kept out of the edit and commit hooks because it needs a build. If a hook reports errors, fix them before continuing.
 - Keep `docs/`, this file and `AGENTS.md` in sync with any change to includes, layouts, conventions or tooling.
 - Deferred on purpose (need the owner's decision, see `docs/content.md`): compressing the 245 MB of PDFs, converting
-  annotation JPEGs to WebP, full-text search (Pagefind), aligning the local Ruby (4.0) with CI (3.4.1).
+  annotation JPEGs to WebP, full-text search (Pagefind), trimming `Gemfile.lock` platforms, naming real `source:` authors per course.

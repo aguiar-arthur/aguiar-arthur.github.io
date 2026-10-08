@@ -30,6 +30,7 @@ Ignored (`.gitignore`): `_site/`, `.jekyll-cache/`, `.jekyll-metadata`, `.sass-c
   case: `LICENSE` and the page `/license/` once made `jekyll serve` fail with `Operation not permitted` while unlinking
   `_site/LICENSE` (a directory, to macOS). `LICENSE` is now in `exclude:`, and `bin/check-content` reports such clashes.
   After fixing one, delete `_site/` once (`rm -rf _site .jekyll-cache`) and rebuild.
+- **Lowercase names, same case in git.** File and folder names in `_annotations`, `_posts`, `_books`, `_papers`, `pages` and `assets` must be lowercase without spaces (names become URLs, and Linux is case-sensitive). macOS hides case-only renames from git, so the index must match the disk's case: fix with `git mv -f Old new`. `bin/check-content` enforces both as errors via the pre-commit and Claude hooks.
 - **Never commit** `_site/`, caches, editor folders or OS files.
 
 ## PDFs and Git LFS
@@ -55,8 +56,7 @@ The PDFs add up to about 245 MB. If the repository grows uncomfortable, the opti
   ```
 
   Then run `bundle exec jekyll build` and review the diff. Keep `x86_64-linux` (the CI runner) in the list.
-- `.ruby-version` (3.4.1) is what CI uses. Check that your local `ruby -v` matches; a different major version (the
-  gems found under `vendor/bundle/ruby/4.0.0` suggest Ruby 4.0) can build differently from CI.
+- `.ruby-version` (3.4.1) is what CI uses. Check that your local `ruby -v` matches (`rbenv install` reads the file); a different major version can build differently from CI.
 - `Gemfile` keeps `csv` and `logger` for Ruby 3.4+ compatibility.
 
 ## CI (`.github/workflows/jekyll.yml`)

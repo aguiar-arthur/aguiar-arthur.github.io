@@ -8,10 +8,11 @@
 #
 # Errors (exit status 1) break the build in CI: missing/invalid front matter,
 # missing title/date/categories, references to files that do not exist, and
-# pages/ files without an explicit permalink.
+# pages/ files without an explicit permalink, upper-case or spaced file names, and git tracking a different case than the disk.
 # Warnings are advisory: unknown front-matter keys, date vs. file name mismatch,
 # inconsistent category/tag spelling, unreferenced assets, math without MathJax,
-# images without alt text, PDFs in a group folder that are not declared.
+# images without alt text, PDFs in a group folder that are not declared, new files with a 2-digit year.
+# Categories and tags outside _data/taxonomy.yml are errors.
 
 require "yaml"
 require "date"
@@ -20,6 +21,9 @@ require "time"
 Dir.chdir(File.expand_path("..", __dir__))
 
 COLLECTIONS = %w[_posts _annotations _books _papers].freeze
+TAXONOMY = YAML.safe_load(File.read("_data/taxonomy.yml"), aliases: false)
+# Files created before the 4-digit-year rule; they keep their names because renaming changes their URLs.
+LEGACY_SHORT_DATES = File.exist?("bin/legacy-short-dates.txt") ? File.readlines("bin/legacy-short-dates.txt", chomp: true) : []
 KNOWN_KEYS = %w[layout title date categories tags description lang permalink files license source license_mode].freeze
 LICENSE_MODES = %w[own derived].freeze
 ASSET_PATH = %r{/assets/[^\s"'<>)\]]+}.freeze
@@ -83,7 +87,30 @@ docs.each do |file|
     end
   end
 
+  # Title style: starts with a capital; in "Course - Topic" titles the topic starts with a capital too.
+  title = data["title"].to_s.strip
+  unless title.empty? || group
+    warnings << "#{file}: title should start with an upper-case letter" if title.match?(/\A\p{Ll}/)
+    _prefix, topic = title.split(" - ", 2)
+    if topic
+      warnings << "#{file}: title topic \"#{topic}\" should start with an upper-case letter" if topic.match?(/\A\p{Ll}/)
+    end
+  end
+
   (data.keys - KNOWN_KEYS).each { |key| warnings << "#{file}: unknown front matter key '#{key}'" }
+
+  # Fixed vocabulary (_data/taxonomy.yml): unknown categories/tags are errors, so variants cannot creep in.
+  Array(data["categories"]).each do |c|
+    errors << "#{file}: category #{c.to_s.inspect} is not in _data/taxonomy.yml" unless TAXONOMY["categories"].include?(c.to_s)
+  end
+  Array(data["tags"]).each do |t|
+    errors << "#{file}: tag #{t.to_s.inspect} is not in _data/taxonomy.yml" unless TAXONOMY["tags"].include?(t.to_s)
+  end
+
+  # New files use a 4-digit year (2026-03-22-slug.md); older 2-digit names are grandfathered.
+  if File.basename(file).match?(/\A\d{2}-\d\d-\d\d-/) && !LEGACY_SHORT_DATES.include?(file)
+    warnings << "#{file}: file name should start with a 4-digit year (YYYY-MM-DD-)"
+  end
 
   Array(data["categories"]).each { |c| taxonomy["category"][c.to_s.downcase] << c.to_s }
   Array(data["tags"]).each { |t| taxonomy["tag"][t.to_s.downcase] << t.to_s }
@@ -155,6 +182,29 @@ Dir.glob("pages/**/*.{html,md,markdown}").sort.each do |page|
 
   clash = root_names.find { |n| n.sub(/\..*\z/, "").casecmp?(segment) }
   errors << "#{page}: URL #{permalink} collides with root file #{clash} (case-insensitive filesystems); exclude it in _config.yml or change the permalink" if clash
+end
+
+# File names: lowercase, no spaces. Names are part of the URL, and Linux (CI, GitHub Pages) is case-sensitive
+# while macOS is not, so `Foo.pdf` can work locally and break in production.
+NAME_DIRS = %w[_annotations _posts _books _papers pages assets].freeze
+disk_paths = NAME_DIRS.flat_map { |dir| Dir.glob("#{dir}/**/*", File::FNM_DOTMATCH) }
+                      .select { |p| File.file?(p) && !File.basename(p).start_with?(".") && !p.include?("/.") }
+disk_paths.sort.each do |path|
+  bad = path.split("/").drop(1).any? { |part| part.match?(/[A-Z\s]/) }
+  errors << "#{path}: file and folder names must be lowercase without spaces (they become URLs)" if bad
+end
+
+# The git index must use the same case as the disk. On macOS a case-only rename is invisible to git, so the
+# repository keeps the old name and CI (Linux) fails to find the file.
+if File.directory?(".git") && system("git --version > /dev/null 2>&1")
+  tracked = `git ls-files -z -- #{NAME_DIRS.join(' ')}`.split("\0")
+  real = disk_paths.to_h { |p| [p.downcase, p] }
+  tracked.each do |path|
+    actual = real[path.downcase]
+    next if actual.nil? || actual == path
+
+    errors << "#{path}: git tracks a different case than the disk (#{actual}); run: git mv -f '#{path}' '#{actual}'"
+  end
 end
 
 # Spelling variants of the same category/tag (case-insensitive duplicates).

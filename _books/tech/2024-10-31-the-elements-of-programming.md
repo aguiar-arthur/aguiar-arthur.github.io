@@ -2,7 +2,7 @@
 layout: post
 title:  "Elements of programming style"
 date:   2024-10-31 23:52:00
-categories: ["Programming in general"]
+categories: ["Programming"]
 tags: ["Tech"]
 ---
 

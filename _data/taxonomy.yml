@@ -1,0 +1,28 @@
+# Allowed categories and tags. bin/check-content fails on anything not listed here,
+# so near-duplicates ("Programming in general" vs "Programming") cannot appear by accident.
+# To introduce a new one, add it below in the same commit as the document that uses it.
+categories:
+  - Computer Science
+  - Data Science
+  - Design
+  - Mathematics
+  - Misc
+  - Philosophy
+  - Programming
+  - Statistics
+
+tags:
+  - AI
+  - Algebra
+  - Assembly
+  - Big O
+  - CDI one
+  - Clojure
+  - Distributed Systems
+  - Dotnet
+  - Geometry
+  - Graphics
+  - Linear Algebra
+  - Numeric Calculus
+  - Pre Calculus
+  - Tech

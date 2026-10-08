@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Linear Algebra - Assessment List one"
+title:  "Linear Algebra - Assessment List One"
 date:   2025-09-16 10:00:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]

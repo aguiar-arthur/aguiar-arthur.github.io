@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Linear Algebra - List five"
+title:  "Linear Algebra - List Five"
 date:   2025-11-04 10:00:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]
