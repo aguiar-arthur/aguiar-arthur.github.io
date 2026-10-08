@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ruby \"$CLAUDE_PROJECT_DIR/bin/check-content\" >&2 || exit 2",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

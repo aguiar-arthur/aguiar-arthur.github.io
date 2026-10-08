@@ -10,7 +10,7 @@ theme gem, so the site does not depend on the theme's markup.
 | `_posts`, `_annotations`, `_books`, `_papers` documents | `post` | `defaults:` in `_config.yml` (also written in front matter) |
 | `index.markdown` (landing page) | `home` | its front matter |
 | Group index in a collection (`_papers/<slug>/index.md`) | `group` | its front matter |
-| `posts/principal.html`, `*/tags.html`, `*/categories.html`, `about/index.html` | `post` | their front matter |
+| `pages/posts/principal.html`, `*/tags.html`, `*/categories.html`, `pages/about/index.html` | `post` | their front matter |
 | `404.html` | `default` | its front matter |
 
 Chain: `group` -> `post` -> `default`; `home` -> `default`.
@@ -18,7 +18,7 @@ Chain: `group` -> `post` -> `default`; `home` -> `default`.
 ## `default.html`
 
 The HTML shell: `<html lang>` (from `page.lang`, then `site.lang`, then `en`), the `head.html` include and a
-`.page-content > .wrapper` container around `{{ content }}`. The wrapper width (640px) comes from the theme's CSS.
+`<main class="page-content"> > .wrapper` container (the page's only `main` landmark; layouts nested inside it must not add another) around `{{ content }}`, then `footer.html`. The wrapper width (640px) comes from the theme's CSS.
 
 ## `post.html`
 
@@ -33,7 +33,7 @@ The landing page. Wraps `default`, with a skip link, the site title, the main na
 - **Latest Posts**: the 5 most recent `site.posts` (already newest first), via `list.html`.
 - **Latest Annotations**: 3 most recent `site.annotations` (sorted by `date`, newest first), with a
   fallback message when empty.
-- Footer with the copyright year.
+- No footer of its own: `default` adds the site footer (copyright and license notice).
 
 To add a navigation entry, add an `<a href="{{ "/x/" | relative_url }}">` in the `<nav>`. Books and papers are
 not shown as "latest" sections.
@@ -49,7 +49,7 @@ Front matter it understands:
 | `title` | Page title (rendered by the parent layout). |
 | `description` | Intro paragraph (`<p class="group-intro">`). Also used as the meta description by the SEO tag. |
 | `lang` | If present and not `en`, shows the "About the language" notice (no English translation). |
-| `files` | Documents to list (see [`file-list.html`](includes.md#file-listhtml)). Only these are listed. |
+| `files` | Documents to list, plus optional `divider` headings (see [`file-list.html`](includes.md#file-listhtml)). Only these are listed. |
 
 Order on the page: back link and title (from `post`), language notice -> description -> body of the `index.md` -> file list. Anything you
 write in the Markdown body appears between the description and the list.

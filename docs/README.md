@@ -9,6 +9,7 @@ It is excluded from the published site (`exclude: docs/` in `_config.yml`).
 | [layouts.md](layouts.md) | The custom layouts (`home`, `group`) and how they relate to the theme's layouts. |
 | [papers.md](papers.md) | The `papers` collection: grouped documents, how to add a new group. |
 | [assets.md](assets.md) | CSS (light/dark palette, classes), the client-side search/pagination script, and where PDFs and images live. |
+| [repository.md](repository.md) | Repository layout and hygiene: what is versioned or ignored, PDFs and Git LFS, Bundler and the lockfile, Ruby versions, CI. |
 | [content.md](content.md) | Front matter and naming conventions, the `bin/check-content` validator, taxonomy pages, feeds, deferred work. |
 
 Quick references live in `../CLAUDE.md` (for Claude Code) and `../AGENTS.md` (repository guide).

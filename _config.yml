@@ -1,47 +1,34 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-#
-# If you need help with YAML syntax, here are some quick references for you:
-# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
-# https://learnxinyminutes.com/docs/yaml/
-#
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
+# Site configuration. Jekyll does not reload this file: restart `jekyll serve` after editing it.
 
+# Site
 title: Arthur Aguiar
+description: I write about programming
 email: aguiar99arthur@proton.me
-description: >- # this means to ignore newlines until "baseurl:"
-  I write about programming
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://aguiar-arthur.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  aguiar-arthur
-base_image_path: "/assets/images/"
-
-# Build settings
-theme: no-style-please
-
-# Colour scheme follows the visitor's system (light/dark) via assets/css/site.css.
+github_username: aguiar-arthur
+url: "https://aguiar-arthur.github.io"
+baseurl: ""
 lang: en
+timezone: America/Sao_Paulo # dates without a zone mean the same instant locally and in CI
 favicon: /favicon.ico
 logo: /logo.png
 
+# Licensing: code is MIT (LICENSE). The author's own writing is licensed as below; third-party material is not
+# covered (every page says so by default, see _includes/footer.html and /license/).
+content_license_name: CC BY 4.0
+content_license_url: https://creativecommons.org/licenses/by/4.0/
+
+# Build
+theme: no-style-please # light only; light/dark is handled by assets/css/site.css
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 sass:
   style: :compressed
-
 plugins:
   - jekyll-feed
 
-# One feed for posts (/feed.xml) plus one per collection.
+# Feeds: /feed.xml (posts) plus one per collection.
 feed:
   collections:
     annotations:
@@ -51,11 +38,7 @@ feed:
     papers:
       path: /papers/feed.xml
 
-markdown: kramdown
-kramdown:
-  input: GFM # For GitHub Flavored Markdown
-  syntax_highlighter: rouge
-
+# Content collections. URLs come from the file, so renaming a file changes its URL.
 collections:
   posts:
     output: true
@@ -71,51 +54,22 @@ collections:
     permalink: /papers/:path/
 
 defaults:
-  - scope:
-      path: "" # empty means all files
-      type: "posts"
-    values:
-      layout: post
-  - scope:
-      path: "" 
-      type: "annotations"
-    values:
-      layout: post
-  - scope:
-      path: ""
-      type: "books"
-    values:
-      layout: post
-  - scope:
-      path: ""
-      type: "papers"
-    values:
-      layout: post
-
-# Exclude from processing.
-# The following items will not be processed, by default.
-# Any item listed under the `exclude:` key here will be automatically added to
-# the internal "default list".
-#
-# Excluded items can be processed by explicitly listing the directories or
-# their entries' file path in the `include:` list.
-#
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+  - scope: { path: "", type: "posts" }
+    values: { layout: post }
+  - scope: { path: "", type: "annotations" }
+    values: { layout: post }
+  - scope: { path: "", type: "books" }
+    values: { layout: post }
+  - scope: { path: "", type: "papers" }
+    values: { layout: post }
 
 # Repository-only files that must not be published.
 exclude:
   - docs/
   - bin/
+  - tmp/
   - AGENTS.md
   - CLAUDE.md
   - README.md
+  - LICENSE            # also avoids a clash with the /license/ page on case-insensitive filesystems (macOS)
+  - LICENSE-CONTENT.md

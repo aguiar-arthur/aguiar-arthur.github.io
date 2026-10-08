@@ -1,0 +1,15 @@
+#!/bin/sh
+# Builds the site into a scratch folder and checks internal links, images and scripts
+# (the same check CI runs). Skipped with a notice when html-proofer is not installed.
+# Enable once per clone:  git config core.hooksPath .githooks
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+if ! gem list -i html-proofer >/dev/null 2>&1; then
+  echo "pre-push: html-proofer not installed, skipping the link check."
+  echo "          Install it with: gem install html-proofer --version '~> 5.0'"
+  exit 0
+fi
+
+echo "pre-push: building the site..."
+JEKYLL_ENV=production bundle exec jekyll build --quiet --destination tmp/site || exit 1
+ruby bin/check-site tmp/site

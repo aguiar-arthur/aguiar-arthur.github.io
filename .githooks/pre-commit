@@ -1,0 +1,5 @@
+#!/bin/sh
+# Blocks the commit when the content has errors (warnings do not block).
+# Enable once per clone:  git config core.hooksPath .githooks
+cd "$(git rev-parse --show-toplevel)" || exit 1
+exec ruby bin/check-content

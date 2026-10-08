@@ -55,6 +55,19 @@ td {
   border-color: var(--site-color);
 }
 
+.site-footer {
+  max-width: 640px;
+  margin: 0 auto var(--site-space-5);
+  padding: var(--site-space-3) var(--site-space-3) 0;
+  border-top: var(--site-border-thin);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
 .back-home {
   display: inline-block;
   margin-bottom: var(--site-space-3);
@@ -194,6 +207,19 @@ a:focus-visible {
 .notice__content {
   margin: 0;
   font-size: 1rem;
+}
+
+.file-list__divider {
+  margin: var(--site-space-5) 0 var(--site-space-2);
+  padding-top: var(--site-space-3);
+  border-top: var(--site-border-thin);
+  font-size: 1.1rem;
+}
+
+.file-list__divider:first-child {
+  margin-top: var(--site-space-3);
+  padding-top: 0;
+  border-top: 0;
 }
 
 .content-index__list {

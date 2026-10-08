@@ -33,12 +33,22 @@ papers/
 
 2. Put the PDFs next to `index.md`.
 3. Declare each PDF under `files:`. Files in the folder that are not declared are not listed.
+4. Optionally group them with dividers, which can hold any text and be placed between any two entries:
+
+   ```yaml
+   files:
+     - divider: "Apresentação"
+     - file: "slides.pdf"
+       title: "Slides"
+     - divider: "Material de apoio"
+     - file: "material-de-apoio.pdf"
+   ```
 
 ## How it fits together
 
 - `_config.yml` defines the `papers` collection (`output: true`, `permalink: /papers/:path/`). Each
   group sets its own `permalink`, because the default would produce `/papers/<slug>/index/`.
-- `papers/principal.html` lists `site.papers | where: "layout", "group"` through `content-index.html`,
+- `pages/papers/principal.html` lists `site.papers | where: "layout", "group"` through `content-index.html`,
   newest `date` first. Plain Markdown documents in `_papers/` (non-group) are not listed.
 - PDFs in `_papers/<slug>/` are static files of the collection; Jekyll copies them to
   `/papers/<slug>/<file>.pdf`, which is how `file-list.html` links them.
@@ -50,4 +60,4 @@ papers/
 - The group's `date` is not shown on the page (the theme's `post` layout prints only the title); it is the sort key on the index and appears next to the title in the index list.
 - Always run Jekyll from the repository root. Running it inside `_papers/<slug>/` builds an isolated,
   unstyled mini-site and warns that the layout `group` does not exist.
-- PDFs are Git LFS files (`.gitattributes`).
+- PDFs are plain binaries in Git (see [repository.md](repository.md)).

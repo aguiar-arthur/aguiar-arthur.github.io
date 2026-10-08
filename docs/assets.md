@@ -4,7 +4,7 @@
 
 | File | Role |
 | --- | --- |
-| `main.css` (generated) | Theme styles (monospace body, 640px wrapper), produced by the `no-style-please` gem. Do not create it by hand. |
+| `main.scss` -> `main.css` (generated) | Entry point of the theme styles (monospace body, 640px wrapper). `main.scss` is local and does `@use "no-style-please"` (the theme's partial); the theme's own copy used the deprecated `@import`. |
 | `rouge.css` | Syntax highlighting for fenced code blocks (Rouge). |
 | `site.css` | This site's overrides, loaded last (`head.html`). |
 
@@ -22,6 +22,7 @@ colours in components: use the variables. (The old `theme_config.appearance` set
 | `.pdf-viewer`, `.pdf-viewer__open-card` | `pdf-viewer.html`. |
 | `.content-index__*` (`search`, `search-label`, `list`, `no-results`, `pagination`) | `content-index.html`. |
 | `.list`, `.list__item` | `list.html` and `file-list.html`. |
+| `.file-list-group`, `.file-list__divider` | `file-list.html` wrapper and its divider headings. |
 | `.taxonomy-list` | `tags.html` / `categories.html` pages. |
 | `.notice__title`, `.notice__content` | `warning.html`. |
 | `.about-card` | About page. |
@@ -43,8 +44,8 @@ if the script loads twice; renaming one requires changing both files.
 
 | Path | Content |
 | --- | --- |
-| `assets/pdfs/<topic>/` | PDFs shown by annotations through `pdf-viewer.html`. Git LFS. |
-| `_papers/<slug>/` | PDFs of paper groups (kept next to their `index.md`). Git LFS. |
+| `assets/pdfs/<topic>/` | PDFs shown by annotations through `pdf-viewer.html`. plain binaries (not LFS). |
+| `_papers/<slug>/` | PDFs of paper groups (kept next to their `index.md`). plain binaries (not LFS). |
 | `assets/images/posts/...`, `assets/images/annotations/...` | Images, mirroring the content topic path. |
 
 Reference images with `<img src="{{ '/assets/images/<path>' | relative_url }}" alt="...">`.

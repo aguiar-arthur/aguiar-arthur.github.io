@@ -1,0 +1,5 @@
+---
+---
+// Entry point of the theme stylesheet. The theme ships `@import "no-style-please";`, which Dart Sass
+// deprecates; `@use` loads the same partial (the theme's `_sass/no-style-please.scss`).
+@use "no-style-please";

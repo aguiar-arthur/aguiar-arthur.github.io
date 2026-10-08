@@ -1,6 +1,6 @@
 # Includes (`_includes/`)
 
-Seven components. Call them with `{% include <file> key="value" %}`; read parameters with
+Eight components. Call them with `{% include <file> key="value" %}`; read parameters with
 `include.key` inside the file. Unknown or missing parameters are `nil` (Jekyll does not fail).
 
 | Include | Used in | Purpose |
@@ -12,6 +12,7 @@ Seven components. Call them with `{% include <file> key="value" %}`; read parame
 | [`content-index.html`](#content-indexhtml) | the three `principal.html` index pages (+ papers) | Searchable, paginated index of documents. |
 | [`file-list.html`](#file-listhtml) | `group` layout | Links to files declared in a group's front matter. |
 | [`head.html`](#headhtml) | every page (theme) | Overrides the theme's `<head>`. |
+| [`footer.html`](#footerhtml) | `default` layout (every page) | Copyright and content-license notice. |
 
 ---
 
@@ -64,7 +65,7 @@ whose inner `<p>` is the fallback for browsers that cannot display PDFs (typical
 - There is no link between the annotation's `.md` file and its PDF other than this path. When you
   rename or move either, update the include. Mirror the topic folder (`_annotations/<topic>/` ↔
   `assets/pdfs/<topic>/`).
-- PDFs are Git LFS files (`.gitattributes`); see `../CLAUDE.md` if `git status` looks wrong.
+- PDFs are plain binaries in Git (see [repository.md](repository.md)).
 
 ---
 
@@ -114,8 +115,8 @@ A simple `<ul>` of links.
 
 ## `content-index.html`
 
-The searchable, paginated index used by `posts/principal.html`, `annotations/principal.html`,
-`books/principal.html` and `papers/principal.html`.
+The searchable, paginated index used by `pages/posts/principal.html`, `pages/annotations/principal.html`,
+`pages/books/principal.html` and `pages/papers/principal.html`.
 
 | Parameter | Required | Default | Meaning |
 | --- | --- | --- | --- |
@@ -152,12 +153,21 @@ Lists the documents a group page declares. Used by `_layouts/group.html`; see [p
 
 | Parameter | Required | Default | Meaning |
 | --- | --- | --- | --- |
-| `files` | yes | - | Entries: a string (`"a.pdf"`) or an object (`{ file: "a.pdf", title: "Title" }`). |
+| `files` | yes | - | Entries: a string (`"a.pdf"`), a document (`{ file: "a.pdf", title: "Title" }`) or a divider (`{ divider: "Any text" }`). |
 | `base` | no | `/` | URL of the group page, used to resolve relative file names. |
 | `ext` | no | `.pdf` | Extension removed when a title is derived from the file name. |
 
 ```liquid
 {% include file-list.html files=page.files base=page.url %}
+```
+
+```yaml
+files:
+  - divider: "Slides"
+  - file: "slides.pdf"
+    title: "Slides da apresentação"
+  - divider: "Material de apoio"
+  - file: "material-de-apoio.pdf"
 ```
 
 **How it works**
@@ -166,6 +176,9 @@ Lists the documents a group page declares. Used by `_layouts/group.html`; see [p
   `/` are used as-is (for example `/assets/pdfs/x.pdf`). All URLs pass through `relative_url`.
 - Without a `title`, the label is the file name without extension, with `-`/`_` turned into spaces and the
   first letter capitalised (`material-de-apoio.pdf` -> `Material de apoio`).
+- A `divider` entry renders its text as a section heading (`<h2 class="file-list__divider">`) and splits the list: the
+  documents before and after it are separate `<ul>`s. Dividers can appear anywhere, any number of times, and the text is
+  free (no file needed).
 - Links open in a new tab. With no entries it prints `No documents yet.`
 
 ---
@@ -185,3 +198,22 @@ production), the favicon (`site.favicon`, set to `/favicon.ico` in `_config.yml`
 **Caveats**: the theme's own `head` is not inherited; anything the theme normally puts there must be
 repeated here. If the theme is not loaded (for example when Jekyll runs from a subfolder without
 `_config.yml`), `main.css` is missing and pages look unstyled.
+
+---
+
+## `footer.html`
+
+The site footer, included by `_layouts/default.html` after `<main>`, so every page has it (the home page no longer
+has a footer of its own). No parameters.
+
+It prints `(c) <year> <site title>` and one of two licence notices:
+
+- **Default (every page):** "Based on third-party material, which is not covered by the license. My own writing,
+  solutions and notes are licensed under CC BY 4.0", using `content_license_name` and `content_license_url` from
+  `_config.yml`. The blog is study notes and reviews, so only the author's contribution is licensed.
+- **`source: "Author"`:** the same, naming the author of the material the page is based on.
+- **`license_mode: own`:** plain "Text and notes are licensed under CC BY 4.0", for a page that is entirely the author's.
+- **`license: "text"`:** that text (Markdown allowed) replaces the notice.
+
+It always adds a "License details" link to `/license/`. `head.html` emits `<link rel="license">` only on pages
+without a `license:` override. See [repository.md](repository.md#licensing).

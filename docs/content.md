@@ -13,10 +13,12 @@ tags: ["Pre Calculus"]
 ```
 
 - `title`, `date` and `categories` (a list) are required for posts, annotations and books. Group pages
-  (`layout: group`) need `title` and `date` only.
+  (`layout: group`) need `title` and `date` only. Optional licensing fields: `source`, `license_mode` (`own` or
+  `derived`) and `license` (see [repository.md](repository.md#licensing)). The default notice says the page is based on third-party material; `license_mode: own` marks an entirely original page.
 - Categories and tags are capitalised words reused across documents; do not create near-duplicates
   (`Mathematics` vs `mathematics`).
-- The front-matter `date`, not the file name, is what the site shows and sorts by. Keep them equal.
+- The front-matter `date`, not the file name, is what the site shows and sorts by. Keep them equal. Dates without a
+  zone are read in the site's `timezone` (`America/Sao_Paulo` in `_config.yml`), so local and CI builds agree.
 - File names: `YYYY-MM-DD-slug.md` (annotations may use `YY-MM-DD-`, but prefer four digits).
 - URLs come from the file name: annotations and books use the file path, posts use the file-name slug (not the
   title). **Renaming a file changes its URL** and breaks old links (nothing redirects). The two typos found
@@ -35,14 +37,16 @@ Standard library only; it runs in CI before the build (`.github/workflows/jekyll
 | **Error** (exit 1, fails CI) | Missing or invalid front matter, missing `title`/`date`/`categories`, unparsable date, any `/assets/...` path that does not exist, a group's declared file that does not exist. |
 | **Warning** | Unknown front matter key (catches typos like `gategories`), `categories` not a list, date different from the file name, category/tag spelled in more than one way, asset not referenced anywhere, math without `mathjax.html` (or the include without math), `<img>` without `alt`, a PDF in a group folder that is not declared. |
 
+Run `ruby bin/check-content --sources` to list annotations that do not name the author of their source material.
+
 Add a new known key to `KNOWN_KEYS` in the script when you introduce one.
 
 ## Taxonomy pages
 
-`posts/`, `annotations/` and `books/` each have `tags.html` and `categories.html`. Posts use `site.tags` /
+`pages/posts/`, `pages/annotations/` and `pages/books/` each have `tags.html` and `categories.html`. Posts use `site.tags` /
 `site.categories` (sorted by name); annotations and books build the lists from their own collection, since
 Jekyll's `site.tags` only contains posts. Papers have no taxonomy pages: groups are listed on
-`papers/principal.html`.
+`pages/papers/principal.html`.
 
 ## Feeds
 

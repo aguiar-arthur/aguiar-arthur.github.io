@@ -1,6 +1,17 @@
+# Jekyll build output and caches
 _site/
-.sass-cache/
 .jekyll-cache/
 .jekyll-metadata
+.sass-cache/
+
+# Bundler: where gems are installed is a local choice
+# (e.g. `bundle config set --local path vendor/bundle`), never committed.
+.bundle/
+/vendor/
+
+# Tool caches
+.rumdl_cache/
+tmp/
+
+# OS files
 .DS_Store
-vendor

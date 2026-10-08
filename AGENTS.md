@@ -26,6 +26,8 @@ bundle install
 bundle exec jekyll serve
 bundle exec jekyll build
 ruby bin/check-content   # validates front matter, references and taxonomy
+ruby bin/check-site      # broken links/images in the built _site/ (gem install html-proofer first)
+git config core.hooksPath .githooks   # once per clone: pre-commit runs the validator, pre-push the site check
 ```
 
 Changing `_config.yml` requires restarting `bundle exec jekyll serve` because
@@ -46,7 +48,7 @@ Jekyll does not reload that file automatically.
 | `assets/js/content-index.js` | Client-side search and 10-item pagination for the three principal collection indexes. |
 | `_layouts/` | `default`, `post`, `home` and `group` (local; they replace the theme's). |
 | `_data/` | YAML data used by templates, currently social links. |
-| `posts/`, `annotations/`, `books/`, `papers/` | Index, category, and tag pages for the corresponding content streams. |
+| `pages/` | Standalone pages (`pages/{posts,annotations,books,papers}/` index, category and tag pages, and `pages/about/`). Each declares its own `permalink`. |
 | `_config.yml` | Site metadata, collection behavior, Markdown settings, and permalinks. |
 | `docs/` | Project documentation; excluded from the published site. |
 | `bin/check-content` | Content validator (Ruby, standard library); also run in CI. |
@@ -57,7 +59,9 @@ Jekyll does not reload that file automatically.
 All content documents use YAML front matter and inherit `layout: post` from
 `_config.yml` (explicitly setting it is fine and common in existing files).
 Use a quoted `title`, a parsable `date`, `categories` (a list), and optional `tags`.
-The date must match the date in the file name. Run `ruby bin/check-content` after editing content; it fails on
+The date must match the date in the file name. Licensing front matter: every page defaults to "based on third-party material; only the author's own contribution is
+CC BY 4.0" (the blog is study notes and reviews). Optional `source:` names the material's author, `license_mode: own` marks a page
+that is entirely the author's, and `license:` replaces the footer notice. Code is MIT. Run `ruby bin/check-content` after editing content; it fails on
 missing fields or references to missing files and warns about inconsistencies.
 
 URLs derive from the file, not from the title: renaming or moving a file (or changing a post's `date`) changes its
@@ -82,8 +86,8 @@ configured post URLs are:
 
 The date part comes from the front-matter `date` and `slug` from the file name.
 
-Posts are listed on `posts/principal.html`; the tag and category pages live in
-the same `posts/` directory. The principal page uses
+Posts are listed on `pages/posts/principal.html`; the tag and category pages live in
+`pages/posts/`. The principal page uses
 `_includes/content-index.html`, which displays 10 items per page and filters
 title, date, category, and tag text through `assets/js/content-index.js`.
 
@@ -102,7 +106,7 @@ Annotations render to:
 /annotations/<source path without extension>/
 ```
 
-They are listed by `annotations/principal.html` and are sorted there by date,
+They are listed by `pages/annotations/principal.html` and are sorted there by date,
 newest first. The list is paginated and searchable through the shared
 content-index component.
 
@@ -115,12 +119,12 @@ filename convention. Book pages render to:
 /books/<source path without extension>/
 ```
 
-They are listed by `books/principal.html`, sorted newest first, with the same
+They are listed by `pages/books/principal.html`, sorted newest first, with the same
 10-item pagination and search behavior as posts and annotations.
 
 ### Papers
 
-`papers/principal.html` lists the paper groups; opening one shows the group page
+`pages/papers/principal.html` lists the paper groups; opening one shows the group page
 (`_layouts/group.html`): language banner (when `lang` is not `en`), the `description`
 text, and a list of documents built by `_includes/file-list.html`.
 
@@ -135,7 +139,8 @@ files:
     title: "Display title"
 ```
 
-Only the declared files are listed, in the declared order.
+Only the declared files are listed, in the declared order. An entry `- divider: "Any text"` inserts a section
+heading between documents.
 
 The layout and include are generic and can be reused for other folder-of-documents pages.
 

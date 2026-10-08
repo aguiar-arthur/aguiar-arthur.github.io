@@ -20,6 +20,7 @@ bundle install                 # Ruby 3.4.1 (see .ruby-version)
 bundle exec jekyll serve       # dev server at http://127.0.0.1:4000
 bundle exec jekyll build       # output to _site/ (what CI runs)
 ruby bin/check-content         # content validator (also runs in CI)
+ruby bin/check-site            # html-proofer on the built _site/ (needs `gem install html-proofer`; runs in CI)
 ```
 
 **Always run Jekyll from the repository root.** Running it inside a subfolder (for example `_papers/monads/`)
@@ -36,7 +37,9 @@ stray `_site/` there.
 
 `.github/workflows/jekyll.yml`: build on every push/PR to `main`; deploy to GitHub Pages
 only on push to `main`. Pushing to `main` publishes the site, so avoid pushing broken
-builds. The build job runs `ruby bin/check-content` first and builds with `JEKYLL_ENV=production`; Dependabot
+builds. The build job runs `ruby bin/check-content` first, builds with `JEKYLL_ENV=production`, then runs `ruby bin/check-site`
+(html-proofer, internal links/images/scripts; a failure blocks the deploy). `.github/workflows/links.yml` checks external
+links weekly and never blocks; Dependabot
 (`.github/dependabot.yml`) proposes gem and action updates weekly. `bin/` must stay versioned (CI needs it); it is
 only excluded from the *published site*. Gems `csv` and `logger` in the Gemfile exist for Ruby 3.4+ compatibility; don't remove them.
 
@@ -48,17 +51,18 @@ only excluded from the *published site*. Gems `csv` and `logger` in the Gemfile 
 | `_annotations/<course>/` | Study notes, exercise lists, PDF- or image-backed material (custom collection). |
 | `_books/<topic>/` | Book notes/reviews (custom collection). |
 | `_papers/<group>/` | Two-level collection: each folder is a *group* (`index.md`, `layout: group`) plus its PDFs. |
-| `posts/`, `annotations/`, `books/`, `papers/` | Non-collection pages: `principal.html` (searchable index), `tags.html`, `categories.html`. |
+| `pages/{posts,annotations,books,papers}/` | Standalone pages: `principal.html` (searchable index), `tags.html`, `categories.html`. Every file under `pages/` **must declare a `permalink`** (URLs are independent of the folder). |
+| `pages/about/index.html` | The About page. |
 | `_layouts/` | `default`, `post`, `home`, `group`: all local (they replace the theme's). `group` is the reusable "folder of documents" page. |
 | `_includes/` | `head.html` (overrides theme head), `content-index.html`, `list.html`, `pdf-viewer.html`, `warning.html`, `mathjax.html`, `file-list.html`. |
 | `assets/css/site.css`, `rouge.css` | Site styles and syntax highlighting; loaded after the theme's `main.css` from `head.html`. |
 | `assets/js/content-index.js` | Vanilla-JS client-side search + 10-per-page pagination for the three index pages. |
-| `assets/pdfs/<topic>/` | PDFs shown by annotations. **Stored in Git LFS** (`.gitattributes`: `*.pdf filter=lfs`). |
+| `assets/pdfs/<topic>/` | PDFs shown by annotations. Committed as plain binaries (`.gitattributes`: `*.pdf binary`), not Git LFS. |
 | `assets/images/{posts,annotations}/...` | Images, mirroring content topic paths. |
 | `docs/` | Project documentation (excluded from the site via `exclude:` in `_config.yml`). |
 | `bin/check-content` | Ruby validator for content (front matter, references, taxonomy). |
 | `_data/social_links.yml` | Links rendered on the About page. |
-| `about/index.html`, `404.html`, `index.markdown` | Static pages (`index.markdown` uses `layout: home`). |
+| `404.html`, `index.markdown` | Root pages (`index.markdown` uses `layout: home`; `404.html` must stay at the root). |
 
 ## Collections and URLs (`_config.yml`)
 
@@ -98,6 +102,12 @@ tags: ["Pre Calculus"]
   "Pre Calculus") rather than inventing near-duplicates; the validator warns about spelling variants
   (`Mathematics` vs `mathematics`).
 - Markdown is Kramdown (GFM input) with Rouge highlighting.
+- **Licensing**: code is MIT; text and notes are CC BY 4.0 (footer on every page, `/license/`). The whole site defaults to a "based on third-party material;
+  only the author's own contribution is licensed" footer (the blog is study notes and reviews). Name the real author
+  with `source: "Prof. X, Course"` (per page, or per folder via path-scoped `defaults:`), use `license_mode: own` only for a
+  page that is entirely the author's, or `license: "..."` to replace the notice. `ruby bin/check-content --sources` lists
+  documents without a `source`. Don't remove
+  or change the license wording without being asked.
 - **Math**: add `{% include mathjax.html %}` to any page using TeX (`$$...$$`). It loads MathJax 4
   from jsDelivr; without the include, math renders as raw text.
 - **PDF annotations**: put the PDF in `assets/pdfs/<same-topic>/` and embed it:
@@ -111,7 +121,7 @@ tags: ["Pre Calculus"]
 
 ## Papers (grouped documents)
 
-`papers/principal.html` lists the groups (`site.papers | where: "layout", "group"`) through the
+`pages/papers/principal.html` lists the groups (`site.papers | where: "layout", "group"`) through the
 shared searchable index. Opening a group shows a second-level page: language banner, `description`
 as intro text, then the list of documents. To add a group:
 
@@ -120,28 +130,32 @@ as intro text, then the list of documents. To add a group:
 2. Put the PDFs next to it in `_papers/<slug>/` and declare each one in `index.md`:
    `files: [{ file: "x.pdf", title: "Título" }]`. **Only declared files are listed**, in that order
    (a PDF in the folder but not in `files:` is not shown). Plain strings work too; names starting with
-   `/` are used as-is (e.g. `/assets/pdfs/...`).
+   `/` are used as-is (e.g. `/assets/pdfs/...`). `- divider: "Any text"` entries add a section heading between
+   documents (splitting the list in blocks).
 
 `_layouts/group.html` + `_includes/file-list.html` are collection-agnostic: reuse them for any
 folder-of-documents page (e.g. `_books/<x>/index.md` with `layout: group`). Don't name a group
 `principal` (clashes with the index page). PDFs in `_papers/` are Jekyll static files, copied to
-`/papers/<slug>/<file>.pdf`; they are Git LFS-tracked like all PDFs.
+`/papers/<slug>/<file>.pdf`; they are committed like all PDFs (plain binaries).
 
 ## Gotchas
 
 - Index pages are rendered fully server-side; `content-index.js` hides items client-side. Search
   matches title, date, category and tag text (built in `_includes/content-index.html`).
-- `site.tags`/`site.categories` only contain posts, so `posts/{tags,categories}.html` use them directly while the
+- `site.tags`/`site.categories` only contain posts, so `pages/posts/{tags,categories}.html` use them directly while the
   annotations/books taxonomy pages iterate their own collections. Keep that split if you touch them.
 - `_layouts/home.html` builds "Latest Posts" (5) and "Latest Annotations" (3) from `site.posts` and
   `site.annotations`; books and papers are not on the home page.
+- Page URLs must not collide, ignoring case, with root files copied to `_site/` (macOS is case-insensitive); that is why
+  `LICENSE` is in `exclude:` next to `/license/`. The validator checks it.
 - `head.html` overrides the theme's head (favicon from `site.favicon`, then `main.css`, `rouge.css`,
   `site.css`). Edit carefully; the theme's own `head` is not inherited.
 - The theme (`no-style-please` 0.1.0) is tiny and light-only. Light/dark comes from CSS variables and
   `prefers-color-scheme` in `assets/css/site.css`; use the `--site-*` variables, never hardcoded colours.
-- PDFs are marked `filter=lfs` in `.gitattributes`, but the PDFs committed so far are plain binaries, not LFS pointers.
-  If `git-lfs` is installed locally, `git status` may list every PDF as modified. That is a repository/LFS
-  mismatch, not a content change; do not stage those files.
+- PDFs are plain binary blobs (`.gitattributes`: `*.pdf binary`); no Git LFS pointers exist in the history. If a
+  local `.git/config` or an old `.gitattributes` still applies `filter=lfs`, `git status` lists every PDF as modified;
+  that is a tooling mismatch, not a content change. Do not stage those files.
+- Gems are installed wherever the developer chooses (`.bundle/` and `/vendor/` are git-ignored); never commit them.
 - Styling should stay minimal and theme-compatible; put overrides in `assets/css/site.css` using the
   existing `--site-*` custom properties. Avoid adding JS frameworks or build tooling (the site is
   deliberately dependency-light).
@@ -154,6 +168,10 @@ folder-of-documents page (e.g. `_books/<x>/index.md` with `layout: group`). Don'
 - Don't commit `_site/` or generated caches.
 - After adding or editing content run `ruby bin/check-content`, then verify with `bundle exec jekyll build` that it
   renders and its URL resolves.
+- Hooks run the validator automatically: a Claude Code `PostToolUse` hook (`.claude/settings.json`, after every
+  edit/write) and a Git pre-commit hook (`.githooks/pre-commit`, enabled per clone with
+  `git config core.hooksPath .githooks`). A pre-push hook (`.githooks/pre-push`) builds into `tmp/site` and runs
+  `bin/check-site`; it is kept out of the edit and commit hooks because it needs a build. If a hook reports errors, fix them before continuing.
 - Keep `docs/`, this file and `AGENTS.md` in sync with any change to includes, layouts, conventions or tooling.
 - Deferred on purpose (need the owner's decision, see `docs/content.md`): compressing the 245 MB of PDFs, converting
   annotation JPEGs to WebP, full-text search (Pagefind), aligning the local Ruby (4.0) with CI (3.4.1).

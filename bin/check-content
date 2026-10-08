@@ -3,10 +3,12 @@
 
 # Validates the blog content without building it. Standard library only.
 #
-#   ruby bin/check-content
+#   ruby bin/check-content            # validate
+#   ruby bin/check-content --sources  # also list documents that do not name the author of their source material
 #
 # Errors (exit status 1) break the build in CI: missing/invalid front matter,
-# missing title/date/categories, and references to files that do not exist.
+# missing title/date/categories, references to files that do not exist, and
+# pages/ files without an explicit permalink.
 # Warnings are advisory: unknown front-matter keys, date vs. file name mismatch,
 # inconsistent category/tag spelling, unreferenced assets, math without MathJax,
 # images without alt text, PDFs in a group folder that are not declared.
@@ -18,11 +20,19 @@ require "time"
 Dir.chdir(File.expand_path("..", __dir__))
 
 COLLECTIONS = %w[_posts _annotations _books _papers].freeze
-KNOWN_KEYS = %w[layout title date categories tags description lang permalink files].freeze
+KNOWN_KEYS = %w[layout title date categories tags description lang permalink files license source license_mode].freeze
+LICENSE_MODES = %w[own derived].freeze
 ASSET_PATH = %r{/assets/[^\s"'<>)\]]+}.freeze
 
 errors = []
 warnings = []
+missing_source = []
+config = YAML.safe_load(File.read("_config.yml"), permitted_classes: [Date, Time, Symbol], aliases: false) || {}
+# Front matter defaults that apply to a path (only path-scoped ones; type-scoped defaults are handled in Jekyll).
+path_defaults = Array(config["defaults"]).filter_map do |d|
+  scope = d["scope"] || {}
+  [scope["path"], d["values"] || {}] unless scope["path"].to_s.empty?
+end
 referenced = []
 taxonomy = { "category" => Hash.new { |h, k| h[k] = [] }, "tag" => Hash.new { |h, k| h[k] = [] } }
 
@@ -61,15 +71,30 @@ docs.each do |file|
     end
   end
 
+  errors << "#{file}: license must not be empty" if data.key?("license") && data["license"].to_s.strip.empty?
+  if data.key?("license_mode") && !LICENSE_MODES.include?(data["license_mode"].to_s)
+    errors << "#{file}: license_mode must be one of #{LICENSE_MODES.join(', ')}"
+  end
+
+  unless group
+    effective = path_defaults.select { |path, _| file.start_with?(path.delete_prefix("/")) }.map(&:last).reduce({}, :merge).merge(data)
+    if effective["source"].to_s.strip.empty? && effective["license"].to_s.strip.empty? && effective["license_mode"] != "own"
+      missing_source << file
+    end
+  end
+
   (data.keys - KNOWN_KEYS).each { |key| warnings << "#{file}: unknown front matter key '#{key}'" }
 
   Array(data["categories"]).each { |c| taxonomy["category"][c.to_s.downcase] << c.to_s }
   Array(data["tags"]).each { |t| taxonomy["tag"][t.to_s.downcase] << t.to_s }
 
-  if (name = File.basename(file).match(/\A(\d{2,4})-(\d\d)-(\d\d)-/)) && data["date"].respond_to?(:strftime)
+  # Compare the date as written: YAML converts zone-less times to the machine's time zone,
+  # which would move 00:00-02:59 to the previous day in UTC-3.
+  written = match[1][/^date:\s*["']?(\d{4})-(\d\d)-(\d\d)/, 0]&.scan(/\d+/)
+  if (name = File.basename(file).match(/\A(\d{2,4})-(\d\d)-(\d\d)-/)) && written
     year = name[1].length == 2 ? "20#{name[1]}" : name[1]
-    unless [year, name[2], name[3]] == data["date"].strftime("%Y-%m-%d").split("-")
-      warnings << "#{file}: date #{data['date'].strftime('%Y-%m-%d')} differs from the file name"
+    unless [year, name[2], name[3]] == written.first(3)
+      warnings << "#{file}: date #{written.first(3).join('-')} differs from the file name"
     end
   end
 
@@ -82,7 +107,15 @@ docs.each do |file|
   if group
     declared = []
     Array(data["files"]).each do |entry|
+      if entry.is_a?(Hash) && entry.key?("divider")
+        errors << "#{file}: empty divider in files" if entry["divider"].to_s.strip.empty?
+        next
+      end
       name = entry.is_a?(Hash) ? entry["file"] : entry
+      if name.to_s.strip.empty?
+        errors << "#{file}: files entry #{entry.inspect} needs a file or a divider"
+        next
+      end
       path = name.to_s.start_with?("/") ? name.delete_prefix("/") : File.join(File.dirname(file), name.to_s)
       declared << File.expand_path(path)
       errors << "#{file}: declared document #{name} does not exist" unless File.exist?(path)
@@ -99,6 +132,31 @@ docs.each do |file|
   end
 end
 
+# Standalone pages live in pages/; their URL must be explicit so moving the file never changes it.
+Dir.glob("pages/**/*.{html,md,markdown}").sort.each do |page|
+  front = File.read(page, encoding: "UTF-8")[/\A---\s*\n(.*?)\n---/m, 1]
+  data = front && (YAML.safe_load(front, permitted_classes: [Date, Time], aliases: false) || {})
+  if data.nil?
+    errors << "#{page}: missing front matter"
+  elsif data["permalink"].to_s.strip.empty?
+    errors << "#{page}: pages/ files must declare a permalink"
+  end
+end
+
+# A page URL must not collide with a root file that Jekyll copies to _site/, ignoring case: on macOS (case-insensitive)
+# `/license/` and `LICENSE` end up fighting over the same path and the build fails with EPERM.
+excluded = Array(config["exclude"]).map { |e| e.to_s.sub(%r{/\z}, "").sub(/\s+#.*/, "") }
+root_names = Dir.children(".").reject { |n| n.start_with?("_", ".") || excluded.include?(n) }
+Dir.glob("pages/**/*.{html,md,markdown}").sort.each do |page|
+  front = File.read(page, encoding: "UTF-8")[/\A---\s*\n(.*?)\n---/m, 1]
+  permalink = front && (YAML.safe_load(front, permitted_classes: [Date, Time], aliases: false) || {})["permalink"]
+  segment = permalink.to_s.split("/").reject(&:empty?).first.to_s.sub(/\..*\z/, "")
+  next if segment.empty?
+
+  clash = root_names.find { |n| n.sub(/\..*\z/, "").casecmp?(segment) }
+  errors << "#{page}: URL #{permalink} collides with root file #{clash} (case-insensitive filesystems); exclude it in _config.yml or change the permalink" if clash
+end
+
 # Spelling variants of the same category/tag (case-insensitive duplicates).
 taxonomy.each do |kind, groups|
   groups.each_value do |spellings|
@@ -111,6 +169,15 @@ end
 (Dir.glob("_layouts/*") + Dir.glob("_includes/*")).each { |f| referenced.concat(File.read(f).scan(ASSET_PATH)) }
 Dir.glob("assets/{pdfs,images}/**/*").select { |f| File.file?(f) }.each do |asset|
   warnings << "#{asset}: not referenced anywhere" unless referenced.include?("/#{asset}")
+end
+
+if ARGV.include?("--sources")
+  puts "Documents without a `source` (author of the material they are based on):"
+  missing_source.group_by { |f| File.dirname(f) }.each do |dir, files|
+    puts "  #{dir}/ (#{files.size})"
+  end
+  puts "  all documents name a source" if missing_source.empty?
+  puts
 end
 
 warnings.each { |w| puts "warning: #{w}" }

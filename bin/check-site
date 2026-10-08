@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Checks the built site (_site/) for broken links, images, scripts and invalid HTML
+# references with html-proofer.
+#
+#   bundle exec jekyll build
+#   ruby bin/check-site              # internal links only (fast, deterministic; runs in CI)
+#   ruby bin/check-site --external   # also checks external URLs (slow, flaky; weekly workflow)
+#   ruby bin/check-site tmp/site     # check another build directory (default: _site)
+#
+# Requires: gem install html-proofer --version '~> 5.0'
+
+begin
+  require "html-proofer"
+rescue LoadError
+  warn "html-proofer is not installed. Run: gem install html-proofer --version '~> 5.0'"
+  exit 2
+end
+
+Dir.chdir(File.expand_path("..", __dir__))
+site = ARGV.reject { |arg| arg.start_with?("--") }.first || "_site"
+unless File.exist?(File.join(site, "index.html"))
+  warn "#{site}/ not found. Build the site first: bundle exec jekyll build"
+  exit 2
+end
+
+external = ARGV.include?("--external")
+
+options = {
+  checks: %w[Links Images Scripts],
+  disable_external: !external,
+  # Absolute URLs to this very site (canonical, feeds, social tags) are checked against the local build.
+  swap_urls: { %r{\Ahttps://aguiar-arthur\.github\.io} => "" },
+  enforce_https: true,
+  log_level: :info
+}
+
+if external
+  options[:only_4xx] = true                      # ignore timeouts and 5xx from third parties
+  options[:ignore_status_codes] = [0, 429, 999]  # rate limits and bot blocking
+  options[:typhoeus] = { followlocation: true, timeout: 30, connecttimeout: 15 }
+  options[:hydra] = { max_concurrency: 5 }
+end
+
+HTMLProofer.check_directory(site, options).run

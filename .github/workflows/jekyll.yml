@@ -45,6 +45,12 @@ jobs:
         env:
           JEKYLL_ENV: production
 
+      - name: Install html-proofer
+        run: gem install html-proofer --version '~> 5.0' --no-document
+
+      - name: Check links and HTML references (internal)
+        run: ruby bin/check-site
+
       - name: Upload artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v4

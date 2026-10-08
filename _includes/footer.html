@@ -1,0 +1,33 @@
+{%- comment -%}
+  Site footer, rendered by `default.html` on every page.
+
+  Licensing: code is MIT (`LICENSE`). Most of the site is study notes, summaries and reviews of other
+  people's work, so the default notice licenses only the author's own contribution under the license in
+  `_config.yml` (`content_license_name` / `content_license_url`) and says third-party material is not covered.
+  The notice depends on the page's front matter (or `defaults:` in `_config.yml`), first match wins:
+
+    license: "text"        replaces the notice entirely (Markdown allowed)
+    source: "Author, ..."  same as the default, naming the author of the material the page is based on
+    license_mode: own      plain notice, for a page that is entirely the author's own work
+    (none)                 default: based on third-party material, only the author's contribution is licensed
+{%- endcomment -%}
+<footer class="site-footer">
+  <p>
+    &copy; {{ site.time | date: "%Y" }} {{ site.title }}.
+    {% if page.license -%}
+      {{ page.license | markdownify | remove: "<p>" | remove: "</p>" | strip }}
+    {%- elsif page.source -%}
+      Based on material by {{ page.source | escape }}, which is not covered by the license.
+      My own writing, solutions and notes are licensed under
+      <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>.
+    {%- elsif page.license_mode == "own" -%}
+      Text and notes are licensed under
+      <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>.
+    {%- else -%}
+      Based on third-party material, which is not covered by the license.
+      My own writing, solutions and notes are licensed under
+      <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>.
+    {%- endif %}
+    <a href="{{ '/license/' | relative_url }}">License details</a>.
+  </p>
+</footer>
