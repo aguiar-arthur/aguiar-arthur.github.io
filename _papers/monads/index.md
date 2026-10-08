@@ -8,6 +8,8 @@ description: "Material de apoio e anotações usadas para a montagem deste artig
 # Only the files listed here appear on the page, in this order.
 # PDFs live next to this file (_papers/monads/).
 files:
+  - file: "artigo.pdf"
+    title: "Mônadas: Uma Exposição Matemático-Funcional"
   - file: "material-de-apoio.pdf"
     title: "Material de apoio"
   - file: "slides.pdf"
