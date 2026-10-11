@@ -8,7 +8,7 @@ pages/                                    standalone pages (indexes, tags, categ
 _layouts/ _includes/                      templates and components
 assets/{css,js,pdfs,images}/              static files
 _data/                                    YAML data used by templates
-docs/ bin/                                documentation and tooling (not published)
+docs/ bin/ test/                           documentation, tooling and tests (not published)
 404.html index.markdown                   root pages
 .github/                                  CI workflow and Dependabot
 ```
@@ -20,7 +20,7 @@ Only files that must be at the root are at the root. Pages that used to live in 
 ## What is versioned and what is not
 
 Ignored (`.gitignore`): `_site/`, `.jekyll-cache/`, `.jekyll-metadata`, `.sass-cache/`, `.bundle/`, `/vendor/`,
-`.rumdl_cache/`, `.DS_Store`.
+`.rumdl_cache/`, `node_modules/`, `.DS_Store`.
 
 - **Gems are not vendored.** `.bundle/config` used to be committed with `BUNDLE_PATH: "vendor/bundle"`, which forced a
   machine-specific install path on everyone. It is now untracked. Install location is a local choice:
@@ -56,14 +56,32 @@ The PDFs add up to about 245 MB. If the repository grows uncomfortable, the opti
   ```
 
   Then run `bundle exec jekyll build` and review the diff. Keep `x86_64-linux` (the CI runner) in the list.
-- `.ruby-version` (3.4.1) is what CI uses. Check that your local `ruby -v` matches (`rbenv install` reads the file); a different major version can build differently from CI.
-- `Gemfile` keeps `csv` and `logger` for Ruby 3.4+ compatibility.
+- `.ruby-version` (4.0.7) is what CI uses. Check that your local `ruby -v` matches (`rbenv install` reads the file); a different major version can build differently from CI.
+- `Gemfile` keeps `csv` and `logger` for Ruby 3.4+ compatibility, and a `:test` group with `minitest` (5.x) and `rake` for the tests.
+- `package.json` exists only for the JavaScript tests (`jsdom`); the site itself ships no npm dependencies. Commit `package-lock.json`: CI uses `npm ci`.
 
 ## CI (`.github/workflows/jekyll.yml`)
 
-`ruby bin/check-content` -> `bundle exec jekyll build` (`JEKYLL_ENV=production`) -> `ruby bin/check-site` (internal
-links, images and scripts in the built site) -> upload and deploy on pushes to `main`. A failure in any step blocks the
-deploy. Dependabot proposes gem and GitHub Actions updates weekly (`.github/dependabot.yml`).
+Three jobs. `test` (`bundle exec rake test`, `npm ci`, `npm test`; see [testing.md](testing.md)) and `build`
+(`ruby bin/check-content` -> `bundle exec jekyll build` with `JEKYLL_ENV=production` -> `ruby bin/check-site`: internal
+links, images and scripts in the built site -> upload the Pages artifact) run **in parallel**; `deploy` runs only on
+pushes to `main` and `needs: [test, build]`, so a failure in either blocks it.
+
+- **Permissions**: the workflow only has `contents: read`; `deploy` alone adds `pages: write` and `id-token: write`.
+  Checkouts use `persist-credentials: false`. `actions/configure-pages` was removed: its outputs (base path/origin)
+  were never used because the site is served from the root with an explicit `url`.
+- **Concurrency**: one run per ref; a new push to a pull request cancels its previous run, runs on `main` are never
+  cancelled, and `deploy` has its own `pages` queue that never interrupts a deployment in progress.
+- **Timeouts**: every job has `timeout-minutes` so a hung runner cannot burn minutes.
+- **Caching**: `ruby/setup-ruby` (`bundler-cache`) caches gems by `Gemfile.lock` and Ruby version; `actions/setup-node`
+  caches npm by `package-lock.json`; Node's version comes from `.node-version` (like Ruby's from `.ruby-version`).
+  `npm ci` runs with `--ignore-scripts --no-audit --no-fund`.
+- **Dependabot** (`.github/dependabot.yml`) groups the weekly minor/patch updates of gems, actions and npm into one pull
+  request per ecosystem; majors stay separate.
+
+Idea not done: `html-proofer` is installed with `gem install` on every run (~20 s). Adding it to the `Gemfile` (`:test`
+group) would let the Bundler cache and Dependabot handle it, but it needs `bundle install`/`bundle lock` to update
+`Gemfile.lock`.
 
 A second workflow, `.github/workflows/links.yml`, runs every Monday (and on demand) and also checks **external** URLs
 (`ruby bin/check-site --external`). It is separate because third-party sites time out and rate-limit; a red run means

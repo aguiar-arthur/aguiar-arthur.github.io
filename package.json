@@ -1,0 +1,11 @@
+{
+  "name": "aguiar-arthur.github.io",
+  "private": true,
+  "description": "Tooling for the JavaScript tests only. The site itself ships no JavaScript dependencies.",
+  "scripts": {
+    "test": "node --test \"test/js/**/*.test.mjs\""
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}

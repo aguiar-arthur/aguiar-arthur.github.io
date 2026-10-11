@@ -1,0 +1,102 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Runs the unit tests: Minitest for _includes/ (`bundle exec rake test`) and node:test for assets/js
+# (`npm test`). One entry point for the Git hooks, the Claude Code hook and local use.
+#
+#   ruby bin/run-tests            # everything; fails if the Ruby tooling is missing
+#   ruby bin/run-tests --staged   # pre-commit: only when a staged file can affect the tests
+#   ruby bin/run-tests --hook     # Claude Code PostToolUse: reads the hook JSON on stdin and runs only
+#                                 # when the edited file can affect the tests
+#   add --dry-run to any mode to print what would run instead of running it
+#
+# Nothing is printed on success except one summary line. On failure the test output goes to stderr and
+# the exit status is 2 (the status that makes Claude Code feed stderr back to the model).
+#
+# In --staged and --hook modes missing tooling (`bundle install` not run yet) is a warning, not a
+# failure, so a fresh clone is not blocked; CI always runs the tests for real.
+
+require "json"
+require "open3"
+
+ROOT = File.expand_path("..", __dir__)
+
+# Paths (relative to the repository root) whose change can alter a test result.
+RELEVANT = %r{\A(?:_includes/|assets/js/|test/|Rakefile\z|package(?:-lock)?\.json\z|Gemfile(?:\.lock)?\z|_config\.yml\z)}
+
+def relevant?(path)
+  relative = path.to_s.sub(%r{\A#{Regexp.escape(ROOT)}/?}, "")
+  RELEVANT.match?(relative)
+end
+
+def changed_paths(mode)
+  case mode
+  when :hook
+    input = $stdin.tty? ? "" : $stdin.read
+    data = input.strip.empty? ? {} : JSON.parse(input)
+    [data.dig("tool_input", "file_path")].compact
+  when :staged
+    out, = Open3.capture2("git", "diff", "--cached", "--name-only", chdir: ROOT)
+    out.split("\n")
+  else
+    []
+  end
+rescue JSON::ParserError
+  []
+end
+
+def run(label, *command)
+  output, status = Open3.capture2e(*command, chdir: ROOT)
+  return true if status.success?
+
+  warn "== #{label} failed: #{command.join(' ')}"
+  warn output
+  false
+end
+
+args = ARGV.dup
+dry_run = !args.delete("--dry-run").nil?
+mode = if args.delete("--hook") then :hook
+       elsif args.delete("--staged") then :staged
+       else :all
+       end
+abort "usage: run-tests [--staged | --hook] [--dry-run]" unless args.empty?
+
+if mode != :all && changed_paths(mode).none? { |path| relevant?(path) }
+  puts "tests: skipped (no changed file can affect them)" if dry_run
+  exit 0
+end
+
+lenient = mode != :all
+ran = []
+failed = false
+
+ruby_ready = system("bundle", "check", chdir: ROOT, out: File::NULL, err: File::NULL)
+if !ruby_ready && lenient
+  warn "tests: Ruby tests skipped, gems are missing (run: bundle install)"
+elsif dry_run
+  ran << "ruby"
+elsif run("Ruby tests", "bundle", "exec", "rake", "test")
+  ran << "ruby"
+else
+  failed = true
+end
+
+if File.directory?(File.join(ROOT, "node_modules"))
+  if dry_run
+    ran << "js"
+  elsif run("JavaScript tests", "npm", "test", "--silent")
+    ran << "js"
+  else
+    failed = true
+  end
+else
+  warn "tests: JavaScript tests skipped, node_modules is missing (run: npm ci)"
+end
+
+if failed
+  warn "tests: FAILED"
+  exit 2
+end
+
+puts "tests: #{dry_run ? 'would run' : 'ok'} (#{ran.join(', ')})"

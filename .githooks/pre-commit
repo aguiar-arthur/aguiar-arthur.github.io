@@ -1,5 +1,7 @@
 #!/bin/sh
-# Blocks the commit when the content has errors (warnings do not block).
+# Blocks the commit when the content has errors (warnings do not block) or when the unit tests fail.
+# The tests only run when a staged file can affect them (see bin/run-tests).
 # Enable once per clone:  git config core.hooksPath .githooks
 cd "$(git rev-parse --show-toplevel)" || exit 1
-exec ruby bin/check-content
+ruby bin/check-content || exit 1
+exec ruby bin/run-tests --staged

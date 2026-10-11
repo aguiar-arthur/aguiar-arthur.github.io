@@ -36,7 +36,8 @@
         item.hidden = matches.indexOf(item) < first || matches.indexOf(item) >= last;
       });
 
-      noResults.hidden = matches.length !== 0;
+      // An empty index already shows its own "nothing yet" message; "no matches" is only for searches.
+      noResults.hidden = items.length === 0 || matches.length !== 0;
       pagination.hidden = matches.length <= perPage;
       previous.disabled = currentPage === 1;
       next.disabled = currentPage === pageCount;

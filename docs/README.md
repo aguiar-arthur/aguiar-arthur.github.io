@@ -10,6 +10,7 @@ It is excluded from the published site (`exclude: docs/` in `_config.yml`).
 | [papers.md](papers.md) | The `papers` collection: grouped documents, how to add a new group. |
 | [assets.md](assets.md) | CSS (light/dark palette, classes), the client-side search/pagination script, and where PDFs and images live. |
 | [repository.md](repository.md) | Repository layout and hygiene: what is versioned or ignored, PDFs and Git LFS, Bundler and the lockfile, Ruby versions, CI. |
+| [testing.md](testing.md) | Unit tests: Minitest for the includes, `node:test` + jsdom for `content-index.js`; how to run and extend them. |
 | [content.md](content.md) | Front matter and naming conventions, the `bin/check-content` validator, taxonomy pages, feeds, deferred work. |
 
 Quick references live in `../CLAUDE.md` (for Claude Code) and `../AGENTS.md` (repository guide).
@@ -28,5 +29,6 @@ Markdown content (_posts, _annotations, _books, _papers)
   `{% include name.html param="value" %}`. Inside the snippet, parameters are read as `include.param`.
 - Authors normally only need `warning`, `pdf-viewer` and `mathjax` inside Markdown. The others
   are used by layouts and index pages.
-- There is no build tooling besides Jekyll: no tests, no linters. `bundle exec jekyll build` succeeding
-  (and the page looking right in `jekyll serve`) is the check.
+- Besides Jekyll the only tooling is the content validator (`bin/check-content`), html-proofer on the built site
+  and the unit tests of the includes and of `content-index.js` (see [testing.md](testing.md)). A successful
+  `bundle exec jekyll build` (and the page looking right in `jekyll serve`) is still the check for content.

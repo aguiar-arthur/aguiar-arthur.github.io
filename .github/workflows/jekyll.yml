@@ -11,25 +11,57 @@ on:
 
   workflow_dispatch:  # Allows you to trigger the workflow manually from the Actions tab
 
+# Least privilege by default; only the deploy job gets more.
 permissions:
-  contents: read  # Allow read access to repository contents
-  pages: write  # Allow writing to GitHub Pages
-  id-token: write  # Allow requesting an ID token to interact with other services
+  contents: read
 
+# One run per branch/PR. A new push to a pull request cancels its previous run; runs on main are never
+# cancelled (the deploy has its own queue, see the deploy job).
 concurrency:
-  group: "pages"
-  cancel-in-progress: false  # Do not cancel in-progress deployments
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  # Build job
-  build:
+  # Unit tests: Minitest for _includes/, node:test + jsdom for assets/js (see docs/testing.md).
+  # Runs in parallel with `build`; `deploy` needs both.
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install JavaScript test dependencies
+        run: npm ci --no-audit --no-fund --ignore-scripts
+
+      - name: Test includes (Ruby)
+        run: bundle exec rake test
+
+      - name: Test assets/js (Node)
+        run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -57,15 +89,21 @@ jobs:
         with:
           path: ./_site
 
-  # Deployment job
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [test, build]  # a failing test or build blocks the deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write     # publish to GitHub Pages
+      id-token: write  # verify the deployment source
+    concurrency:
+      group: pages
+      cancel-in-progress: false  # never interrupt a deployment in progress
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4  # Action to deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

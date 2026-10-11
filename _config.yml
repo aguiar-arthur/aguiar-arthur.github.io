@@ -27,6 +27,7 @@ sass:
   style: :compressed
 plugins:
   - jekyll-feed
+  - jekyll-sitemap
 
 # Feeds: /feed.xml (posts) plus one per collection.
 feed:
@@ -67,6 +68,11 @@ defaults:
 exclude:
   - docs/
   - bin/
+  - test/
+  - Rakefile
+  - package.json
+  - package-lock.json
+  - node_modules/
   - tmp/
   - AGENTS.md
   - CLAUDE.md

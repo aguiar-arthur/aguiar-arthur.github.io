@@ -16,11 +16,14 @@ science and philosophy. Content is English, except some annotations written in p
 ## Commands
 
 ```sh
-bundle install                 # Ruby 3.4.1 (see .ruby-version)
+bundle install                 # Ruby 4.0.7 (see .ruby-version)
 bundle exec jekyll serve       # dev server at http://127.0.0.1:4000
 bundle exec jekyll build       # output to _site/ (what CI runs)
 ruby bin/check-content         # content validator (also runs in CI)
 ruby bin/check-site            # html-proofer on the built _site/ (needs `gem install html-proofer`; runs in CI)
+bundle exec rake test          # Minitest: unit tests of _includes/ (runs in CI)
+npm ci && npm test             # node:test + jsdom: unit tests of assets/js/content-index.js (runs in CI)
+ruby bin/run-tests             # both suites, as the hooks run them (see docs/testing.md)
 ```
 
 **Always run Jekyll from the repository root.** Running it inside a subfolder (for example `_papers/monads/`)
@@ -29,15 +32,15 @@ stray `_site/` there.
 
 - `_config.yml` is NOT hot-reloaded: restart `jekyll serve` after editing it.
 - `ruby bin/check-content` validates front matter, asset references and taxonomy. Run it after adding or
-  editing content; errors fail CI, warnings are advisory. There is no other test suite: **a successful `bundle exec jekyll build` is the build check.**
+  editing content; errors fail CI, warnings are advisory. The unit tests of the includes and of `content-index.js` live in `test/` (`docs/testing.md`): run `bundle exec rake test` (and `npm test`) after changing `_includes/` or `assets/js/`, and update the matching test. **A successful `bundle exec jekyll build` is still the build check.**
   Also open the affected page in `jekyll serve` for visual changes (math, PDFs, pagination).
 - `_site/`, `.jekyll-cache/`, `.sass-cache/`, `vendor/` are git-ignored build output. Never edit `_site/`.
 
 ## Deployment
 
-`.github/workflows/jekyll.yml`: build on every push/PR to `main`; deploy to GitHub Pages
-only on push to `main`. Pushing to `main` publishes the site, so avoid pushing broken
-builds. The build job runs `ruby bin/check-content` first, builds with `JEKYLL_ENV=production`, then runs `ruby bin/check-site`
+`.github/workflows/jekyll.yml`: the `test` and `build` jobs run in parallel on every push/PR to `main`; `deploy` to GitHub Pages
+runs only on push to `main` and needs both. Pushing to `main` publishes the site, so avoid pushing broken
+builds. The `test` job runs the Ruby and Node unit tests (`docs/testing.md`). The build job runs `ruby bin/check-content` first, builds with `JEKYLL_ENV=production`, then runs `ruby bin/check-site`
 (html-proofer, internal links/images/scripts; a failure blocks the deploy). `.github/workflows/links.yml` checks external
 links weekly and never blocks; Dependabot
 (`.github/dependabot.yml`) proposes gem and action updates weekly. `bin/` must stay versioned (CI needs it); it is
@@ -60,10 +63,11 @@ only excluded from the *published site*. Gems `csv` and `logger` in the Gemfile 
 | `assets/pdfs/<topic>/` | PDFs shown by annotations. Committed as plain binaries (`.gitattributes`: `*.pdf binary`), not Git LFS. |
 | `assets/images/{posts,annotations}/...` | Images, mirroring content topic paths. |
 | `docs/` | Project documentation (excluded from the site via `exclude:` in `_config.yml`). |
+| `test/`, `Rakefile`, `package.json` | Unit tests (Minitest for `_includes/`, `node:test` + jsdom for `assets/js/`); see `docs/testing.md`. `package.json` is for test tooling only. |
 | `bin/check-content`, `bin/check-site` | Content validator (front matter, references, taxonomy, file-name case) and html-proofer wrapper for the built site. |
 | `.githooks/`, `.claude/settings.json` | Git pre-commit/pre-push hooks and the Claude Code PostToolUse hook that run the checks. |
 | `_data/social_links.yml`, `_data/taxonomy.yml` | About-page links; the allowed categories and tags (validator vocabulary). |
-| `404.html`, `index.markdown` | Root pages (`index.markdown` uses `layout: home`; `404.html` must stay at the root). |
+| `404.html`, `index.markdown`, `robots.txt` | Root pages (`index.markdown` uses `layout: home`; `404.html` must stay at the root) and the static `robots.txt` (no front matter, copied as is). |
 
 ## Collections and URLs (`_config.yml`)
 
@@ -78,7 +82,7 @@ All four default to `layout: post`. URLs come from the file, not from the page t
 is the **file path**, and a post's URL uses its file-name slug and its front-matter `date`. So renaming or moving a
 file, or changing a post's `date`, changes its URL and nothing redirects the old one. Don't rename without being asked.
 
-Feeds: `jekyll-feed` serves `/feed.xml` (posts) plus `/annotations/feed.xml`, `/books/feed.xml`, `/papers/feed.xml`.
+Sitemap: `jekyll-sitemap` serves `/sitemap.xml` (listed in `robots.txt`; `404.html` is left out by the plugin). Feeds: `jekyll-feed` serves `/feed.xml` (posts) plus `/annotations/feed.xml`, `/books/feed.xml`, `/papers/feed.xml`.
 
 ## Writing content
 
@@ -163,7 +167,7 @@ folder-of-documents page (e.g. `_books/<x>/index.md` with `layout: group`). Don'
 - Gems are installed wherever the developer chooses (`.bundle/` and `/vendor/` are git-ignored); never commit them.
 - Styling should stay minimal and theme-compatible; put overrides in `assets/css/site.css` using the
   existing `--site-*` custom properties. Avoid adding JS frameworks or build tooling (the site is
-  deliberately dependency-light).
+  deliberately dependency-light; `package.json` exists only for the JavaScript tests and `jsdom` is its only dependency).
 - `AGENTS.md`, `CLAUDE.md`, `README.md`, `docs/` and `bin/` are in `exclude:` and are not published.
 
 ## Working conventions
@@ -174,8 +178,8 @@ folder-of-documents page (e.g. `_books/<x>/index.md` with `layout: group`). Don'
 - After adding or editing content run `ruby bin/check-content`, then verify with `bundle exec jekyll build` that it
   renders and its URL resolves.
 - Hooks run the validator automatically: a Claude Code `PostToolUse` hook (`.claude/settings.json`, after every
-  edit/write) and a Git pre-commit hook (`.githooks/pre-commit`, enabled per clone with
-  `git config core.hooksPath .githooks`). A pre-push hook (`.githooks/pre-push`) builds into `tmp/site` and runs
+  edit/write; it also runs `bin/run-tests --hook`, which only runs the tests when the edited file can affect them) and a Git pre-commit hook (`.githooks/pre-commit`: validator, then `bin/run-tests --staged`; enabled per clone with
+  `git config core.hooksPath .githooks`). A pre-push hook (`.githooks/pre-push`) runs all the tests, builds into `tmp/site` and runs
   `bin/check-site`; it is kept out of the edit and commit hooks because it needs a build. If a hook reports errors, fix them before continuing.
 - Keep `docs/`, this file and `AGENTS.md` in sync with any change to includes, layouts, conventions or tooling.
 - Deferred on purpose (need the owner's decision, see `docs/content.md`): compressing the 245 MB of PDFs, converting

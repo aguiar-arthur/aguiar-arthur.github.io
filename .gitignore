@@ -9,6 +9,9 @@ _site/
 .bundle/
 /vendor/
 
+# Node: only used by the JavaScript tests (npm ci)
+node_modules/
+
 # Tool caches
 .rumdl_cache/
 tmp/

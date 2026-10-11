@@ -12,7 +12,7 @@ Detailed component, layout, papers and asset documentation is in [`docs/`](docs/
   commands.
 - Jekyll `~> 4.4.0` builds the site.
 - `no-style-please` supplies the base theme and layouts.
-- `jekyll-feed` generates the feed.
+- `jekyll-feed` generates the feed and `jekyll-sitemap` generates `/sitemap.xml` (referenced by `robots.txt`).
 - Markdown is rendered by Kramdown with GitHub Flavored Markdown input.
 - Code blocks are highlighted with Rouge. Its stylesheet is loaded globally
   from `assets/css/rouge.css` by the local head include.
@@ -27,7 +27,9 @@ bundle exec jekyll serve
 bundle exec jekyll build
 ruby bin/check-content   # validates front matter, references and taxonomy
 ruby bin/check-site      # broken links/images in the built _site/ (gem install html-proofer first)
-git config core.hooksPath .githooks   # once per clone: pre-commit runs the validator, pre-push the site check
+bundle exec rake test    # unit tests of _includes/ (Minitest)
+npm ci && npm test       # unit tests of assets/js/content-index.js (node:test + jsdom)
+git config core.hooksPath .githooks   # once per clone: pre-commit runs the validator, pre-push the tests and the site check
 ```
 
 Changing `_config.yml` requires restarting `bundle exec jekyll serve` because
@@ -51,6 +53,8 @@ Jekyll does not reload that file automatically.
 | `pages/` | Standalone pages (`pages/{posts,annotations,books,papers}/` index, category and tag pages, and `pages/about/`). Each declares its own `permalink`. |
 | `_config.yml` | Site metadata, collection behavior, Markdown settings, and permalinks. |
 | `docs/` | Project documentation; excluded from the published site. |
+| `test/`, `Rakefile`, `package.json` | Unit tests for the includes (Ruby) and `content-index.js` (Node); see [`docs/testing.md`](docs/testing.md). |
+| `bin/run-tests` | Runs the Ruby and Node tests; used by the Claude Code hook, pre-commit, pre-push (see [`docs/testing.md`](docs/testing.md)). |
 | `bin/check-content` | Content validator (Ruby, standard library); also run in CI and by the hooks. |
 | `bin/check-site` | html-proofer wrapper for the built `_site/`; runs in CI and the pre-push hook. |
 | `_site/` | Generated output. Treat as build artefacts; edit source files instead. |

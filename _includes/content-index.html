@@ -20,7 +20,7 @@
           {% if item.categories %}{{ item.categories | join: " " }}{% endif %}
           {% if item.tags %}{{ item.tags | join: " " }}{% endif %}
         {% endcapture %}
-        <li data-index-item data-search="{{ search_text | strip | downcase | escape }}">
+        <li data-index-item data-search="{{ search_text | normalize_whitespace | strip | downcase | escape }}">
           <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
           <p>{{ item.date | date: "%B %d, %Y" }}</p>
         </li>

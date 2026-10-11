@@ -1,0 +1,5 @@
+# Everything on the site is public and may be crawled.
+User-agent: *
+Allow: /
+
+Sitemap: https://aguiar-arthur.github.io/sitemap.xml

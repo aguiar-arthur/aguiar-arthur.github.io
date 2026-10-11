@@ -1,6 +1,6 @@
 # Includes (`_includes/`)
 
-Eight components. Call them with `{% include <file> key="value" %}`; read parameters with
+Eight components (all but `mathjax` and `head` have unit tests, see [testing.md](testing.md); update the test when you change one). Call them with `{% include <file> key="value" %}`; read parameters with
 `include.key` inside the file. Unknown or missing parameters are `nil` (Jekyll does not fail).
 
 | Include | Used in | Purpose |
@@ -132,11 +132,11 @@ The searchable, paginated index used by `pages/posts/principal.html`, `pages/ann
 **How it works**
 1. Server side (Liquid): every item becomes `<li data-index-item data-search="...">` containing the
    link and the date. `data-search` holds the lowercase, escaped text of title, date
-   (`%B %d, %Y`), categories and tags.
+   (`%B %d, %Y`), categories and tags, on a single line (whitespace collapsed), so a query can span fields.
 2. Client side (`assets/js/content-index.js`): on `DOMContentLoaded` it finds every `[data-per-page]`
    container, filters items by the search box (substring match on `data-search`), shows 10 per page
-   (`data-per-page="10"` is hardcoded in the include), and toggles the "no results" message and the
-   Previous/Next navigation.
+   (`data-per-page="10"` is hardcoded in the include), and toggles the "no results" message (only when there are items but none match; an empty index shows
+   its own message) and the Previous/Next navigation.
 3. The include loads the script itself (`defer`), so pages need nothing else. The script marks each index
    it initialises (`data-index-ready`), so a second load or a second instance never wires an index twice.
 

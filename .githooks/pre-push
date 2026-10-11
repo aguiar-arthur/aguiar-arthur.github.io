@@ -1,8 +1,11 @@
 #!/bin/sh
-# Builds the site into a scratch folder and checks internal links, images and scripts
-# (the same check CI runs). Skipped with a notice when html-proofer is not installed.
+# Runs the unit tests, then builds the site into a scratch folder and checks internal links, images and
+# scripts (the same checks CI runs). Skipped with a notice when html-proofer is not installed.
 # Enable once per clone:  git config core.hooksPath .githooks
 cd "$(git rev-parse --show-toplevel)" || exit 1
+
+echo "pre-push: running the tests..."
+ruby bin/run-tests || exit 1
 
 if ! gem list -i html-proofer >/dev/null 2>&1; then
   echo "pre-push: html-proofer not installed, skipping the link check."
