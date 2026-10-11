@@ -1,15 +1,15 @@
 {% assign pdf_url = include.file | relative_url %}
 {% assign pdf_height = include.height | default: "800px" %}
-{% assign pdf_title = include.title | default: "PDF document" %}
+{% assign pdf_title = include.title | default: page.title | default: "PDF document" %}
 
 <div class="pdf-viewer">
   <div class="pdf-viewer__open-card">
-    <a href="{{ pdf_url }}" target="_blank" rel="noopener noreferrer">Open PDF</a>
+    <a href="{{ pdf_url }}" lang="{{ site.lang }}" target="_blank" rel="noopener noreferrer">Open PDF<span class="visually-hidden">: {{ pdf_title | escape }} (opens in a new tab)</span></a>
   </div>
-  <object data="{{ pdf_url }}" type="application/pdf" width="100%" height="{{ pdf_height }}" aria-label="{{ pdf_title }}">
-    <p>
+  <object data="{{ pdf_url }}" type="application/pdf" width="100%" height="{{ pdf_height }}" aria-label="{{ pdf_title | escape }}">
+    <p lang="{{ site.lang }}">
       Your browser cannot display this PDF.
-      <a href="{{ pdf_url }}" target="_blank" rel="noopener noreferrer">Open PDF</a>.
+      <a href="{{ pdf_url }}" target="_blank" rel="noopener noreferrer">Open PDF<span class="visually-hidden">: {{ pdf_title | escape }} (opens in a new tab)</span></a>.
     </p>
   </object>
 </div>

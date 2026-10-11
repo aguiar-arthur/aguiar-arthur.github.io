@@ -11,7 +11,7 @@
     autocomplete="off"
     data-index-search>
 
-  <ul class="content-index__list" data-index-list>
+  <ul class="content-index__list" tabindex="-1" aria-label="Results" data-index-list>
     {% if index_items and index_items != empty %}
       {% for item in index_items %}
         {% capture search_text %}
@@ -31,11 +31,13 @@
   </ul>
 
   <p class="content-index__no-results" data-index-no-results hidden>No matching items found.</p>
+  {%- comment -%} Filled by content-index.js after a search or a page change, so screen readers hear the result. {%- endcomment %}
+  <p class="visually-hidden" role="status" aria-live="polite" data-index-announcer></p>
 
   <nav class="content-index__pagination" aria-label="Pagination" data-index-pagination hidden>
-    <button type="button" data-index-previous>Previous</button>
+    <button type="button" aria-label="Previous page" data-index-previous>Previous</button>
     <span data-index-status></span>
-    <button type="button" data-index-next>Next</button>
+    <button type="button" aria-label="Next page" data-index-next>Next</button>
   </nav>
 </div>
 

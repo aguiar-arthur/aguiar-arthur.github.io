@@ -42,8 +42,8 @@ class ListTest < Minitest::Test
   def test_default_classes
     html = render([{ title: "A", url: "/a/" }])
 
-    assert_includes tags(html, "ul").fetch(0)["class"].split, "list"
-    assert_includes tags(html, "li").fetch(0)["class"].split, "list__item"
+    assert_equal "list", tags(html, "ul").fetch(0)["class"] # once, not "list list"
+    assert_equal "list__item", tags(html, "li").fetch(0)["class"]
   end
 
   def test_custom_list_and_item_classes

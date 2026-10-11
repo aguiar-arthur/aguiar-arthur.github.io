@@ -18,7 +18,7 @@ class FileListTest < Minitest::Test
 
     link = links(html).fetch(0)
     assert_equal "/papers/monads/intro-to-monads.pdf", link["href"]
-    assert_equal "Intro to monads", link.text
+    assert_equal "Intro to monads", link.visible_text
   end
 
   def test_underscores_and_directories_are_cleaned_up_in_derived_titles
@@ -26,7 +26,7 @@ class FileListTest < Minitest::Test
 
     link = links(html).fetch(0)
     assert_equal "/g/slides/my_first-file.pdf", link["href"]
-    assert_equal "My first file", link.text
+    assert_equal "My first file", link.visible_text
   end
 
   def test_explicit_title_wins_over_the_file_name
@@ -34,13 +34,13 @@ class FileListTest < Minitest::Test
 
     link = links(html).fetch(0)
     assert_equal "/g/x.pdf", link["href"]
-    assert_equal "Título explícito", link.text
+    assert_equal "Título explícito", link.visible_text
   end
 
   def test_hash_entry_without_title_derives_it_from_the_file_name
     html = render([{ file: "relatorio-final.pdf" }], base: "/g/")
 
-    assert_equal "Relatorio final", links(html).fetch(0).text
+    assert_equal "Relatorio final", links(html).fetch(0).visible_text
   end
 
   def test_entry_starting_with_slash_ignores_base
@@ -66,7 +66,7 @@ class FileListTest < Minitest::Test
   def test_custom_extension_is_stripped_from_derived_titles
     html = render(["notes.md"], base: "/g/", ext: ".md")
 
-    assert_equal "Notes", links(html).fetch(0).text
+    assert_equal "Notes", links(html).fetch(0).visible_text
   end
 
   def test_links_open_in_a_new_tab_safely
@@ -76,10 +76,18 @@ class FileListTest < Minitest::Test
     assert_equal "noopener noreferrer", link["rel"]
   end
 
+  def test_links_tell_screen_readers_they_open_a_new_tab
+    link = links(render(["a.pdf"], base: "/g/")).fetch(0)
+
+    assert_equal "A (opens in a new tab)", link.text
+    assert_equal "A", link.visible_text
+    assert_equal "en", tags(link.inner, "span").fetch(0)["lang"]
+  end
+
   def test_entries_keep_their_declared_order
     html = render(["b.pdf", "a.pdf", "c.pdf"], base: "/g/")
 
-    assert_equal ["B", "A", "C"], links(html).map(&:text)
+    assert_equal ["B", "A", "C"], links(html).map(&:visible_text)
   end
 
   def test_divider_splits_the_list_in_two_lists_with_a_heading_between
@@ -89,8 +97,8 @@ class FileListTest < Minitest::Test
     headings = elements(html, "h2")
     assert_equal ["Part two"], headings.map(&:text)
     assert_equal "file-list__divider", headings.fetch(0)["class"]
-    assert_operator html.index(">A</a>"), :<, html.index("Part two")
-    assert_operator html.index("Part two"), :<, html.index(">B</a>")
+    assert_operator html.index(">A<span"), :<, html.index("Part two")
+    assert_operator html.index("Part two"), :<, html.index(">B<span")
   end
 
   def test_leading_and_trailing_dividers_do_not_create_empty_lists

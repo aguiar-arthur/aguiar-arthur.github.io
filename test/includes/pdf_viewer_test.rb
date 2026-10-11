@@ -41,7 +41,26 @@ class PdfViewerTest < Minitest::Test
     html = render_include("pdf-viewer.html", file: FILE)
 
     assert_operator html.index("pdf-viewer__open-card"), :<, html.index("<object")
-    assert_includes elements(html, "a").map(&:text), "Open PDF"
+    assert_includes elements(html, "a").map(&:visible_text), "Open PDF"
+  end
+
+  def test_links_name_the_document_and_the_new_tab_for_screen_readers
+    links = elements(render_include("pdf-viewer.html", file: FILE, title: "List 1"), "a")
+
+    links.each { |link| assert_equal "Open PDF: List 1 (opens in a new tab)", link.text }
+  end
+
+  def test_title_defaults_to_the_page_title
+    html = render_include("pdf-viewer.html", { file: FILE }, page: { title: "CDI one - Limits" })
+
+    assert_equal "CDI one - Limits", tags(html, "object").fetch(0)["aria-label"]
+  end
+
+  def test_english_text_is_marked_as_english_on_pages_in_other_languages
+    html = render_include("pdf-viewer.html", { file: FILE }, page: { lang: "pt-BR" })
+
+    assert_equal "en", tags(html, "a").fetch(0)["lang"]
+    assert_equal "en", tags(html, "p").fetch(0)["lang"]
   end
 
   def test_fallback_message_is_inside_the_object

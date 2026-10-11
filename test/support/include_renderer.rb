@@ -5,8 +5,7 @@
 # or written to disk: only a `Jekyll::Site` is instantiated (its `_config.yml` is loaded so
 # `site.title`, `site.baseurl`, the license settings, etc. are the real ones).
 #
-# Used by the Minitest suite (via `test_helper.rb`) and by the Node tests, which call
-# `render_include.rb` to get the real HTML of an include.
+# Used by the Minitest suite (via `test_helper.rb`).
 
 require "jekyll"
 require "tmpdir"

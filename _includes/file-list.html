@@ -49,7 +49,7 @@
           {% assign fl_open = true %}
         {% endunless %}
           <li class="list__item">
-            <a href="{{ fl_url }}" target="_blank" rel="noopener noreferrer">{{ fl_title }}</a>
+            <a href="{{ fl_url }}" target="_blank" rel="noopener noreferrer">{{ fl_title }}<span class="visually-hidden" lang="{{ site.lang }}"> (opens in a new tab)</span></a>
           </li>
       {% endif %}
     {% endfor %}

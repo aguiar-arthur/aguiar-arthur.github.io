@@ -1,11 +1,11 @@
 {% assign list_items = include.items | default: nil %}
-{% assign list_class = include.class | default: 'list' %}
-{% assign item_class = include.item_class | default: '' %}
+{% assign list_class = 'list ' | append: include.class | strip %}
+{% assign item_class = 'list__item ' | append: include.item_class | strip %}
 
 {% if list_items and list_items != empty %}
-  <ul class="list {{ list_class }}">
+  <ul class="{{ list_class }}">
     {% for item in list_items %}
-      <li class="list__item {{ item_class }}">
+      <li class="{{ item_class }}">
         {% if item.url %}
           {% assign list_item_url = item.url %}
           {% assign list_item_first = list_item_url | slice: 0 %}

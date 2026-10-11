@@ -18,6 +18,11 @@ module HtmlTesting
     def text
       HtmlTesting.text_of(inner)
     end
+
+    # The text a sighted reader sees: `text` without the `.visually-hidden` parts (screen-reader only).
+    def visible_text
+      HtmlTesting.text_of(inner.gsub(%r{<span class="visually-hidden"[^>]*>.*?</span>}m, ""))
+    end
   end
 
   def self.text_of(html)

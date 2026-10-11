@@ -11,23 +11,20 @@
     license_mode: own      plain notice, for a page that is entirely the author's own work
     (none)                 default: based on third-party material, only the author's contribution is licensed
 {%- endcomment -%}
-<footer class="site-footer">
+<footer class="site-footer" lang="{{ site.lang }}">
   <p>
     &copy; {{ site.time | date: "%Y" }} {{ site.title }}.
     {% if page.license -%}
       {{ page.license | markdownify | remove: "<p>" | remove: "</p>" | strip }}
     {%- elsif page.source -%}
-      Based on material by {{ page.source | escape }}, which is not covered by the license.
-      My own writing, solutions and notes are licensed under
-      <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>.
+      Based on material by {{ page.source | escape }}. My own notes are under
+      <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>; the original material is not.
     {%- elsif page.license_mode == "own" -%}
-      Text and notes are licensed under
-      <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>.
+      Licensed under <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>.
     {%- else -%}
-      Based on third-party material, which is not covered by the license.
-      My own writing, solutions and notes are licensed under
-      <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>.
+      My own notes are under <a rel="license" href="{{ site.content_license_url }}">{{ site.content_license_name }}</a>;
+      third-party material is not.
     {%- endif %}
-    <a href="{{ '/license/' | relative_url }}">License details</a>.
+    <a href="{{ '/license/' | relative_url }}">License</a>
   </p>
 </footer>

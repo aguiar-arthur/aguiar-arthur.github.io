@@ -2,7 +2,9 @@
 
 # Site
 title: Arthur Aguiar
-description: I write about programming
+# `author` must be set: without it the theme's own default author leaks into the SEO tags and feeds.
+author: Arthur Aguiar
+description: Notes on programming, mathematics, computer science and philosophy.
 email: aguiar99arthur@proton.me
 github_username: aguiar-arthur
 url: "https://aguiar-arthur.github.io"
@@ -58,7 +60,8 @@ defaults:
   - scope: { path: "", type: "posts" }
     values: { layout: post }
   - scope: { path: "", type: "annotations" }
-    values: { layout: post }
+    # Annotations start with a notice or a PDF viewer, which would otherwise become the meta description.
+    values: { layout: post, description: "Study notes and exercise lists by Arthur Aguiar." }
   - scope: { path: "", type: "books" }
     values: { layout: post }
   - scope: { path: "", type: "papers" }
@@ -70,9 +73,6 @@ exclude:
   - bin/
   - test/
   - Rakefile
-  - package.json
-  - package-lock.json
-  - node_modules/
   - tmp/
   - AGENTS.md
   - CLAUDE.md

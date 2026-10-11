@@ -1,6 +1,11 @@
-<div class="notice notice--warning" role="alert">
+{%- comment -%}
+  A bordered notice. It is static information, so it is a `note`, not an `alert` (an alert interrupts screen
+  readers as soon as the page loads). `lang` defaults to the site language: the notices are written in English,
+  even on pages whose own `lang` is pt-BR.
+{%- endcomment -%}
+<div class="notice notice--warning" role="note" lang="{{ include.lang | default: site.lang }}">
   {% if include.title %}
-    <h6 class="notice__title">{{ include.title }}</h6>
+    <p class="notice__title"><strong>{{ include.title }}</strong></p>
   {% endif %}
   <div class="notice__content">
     {{ include.text | markdownify | remove: '<p>' | remove: '</p>' }}
