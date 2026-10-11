@@ -12,8 +12,9 @@ Requires Ruby (see `.ruby-version`) and Bundler.
 bundle install
 bundle exec jekyll serve      # http://127.0.0.1:4000  (run from the repository root)
 ruby bin/check-content        # validates front matter, references and taxonomy
+bundle exec rake test         # unit tests
 bundle exec jekyll build && ruby bin/check-site   # broken links/images in the built site (gem install html-proofer first)
-git config core.hooksPath .githooks   # once per clone: validator on commit, site link check on push
+git config core.hooksPath .githooks   # once per clone: validator and tests on commit, site check on push
 ```
 
 Gems install wherever you configure Bundler; to keep them inside the project use
@@ -26,8 +27,8 @@ Gems install wherever you configure Bundler; to keep them inside the project use
 | `_posts/`, `_annotations/`, `_books/`, `_papers/` | The content collections. |
 | `pages/` | Standalone pages: indexes, tags, categories, About. |
 | `_includes/`, `_layouts/`, `assets/` | Components, layouts, styles and script. |
-| `docs/` | Documentation: components, layouts, papers, assets, content conventions. |
-| `AGENTS.md`, `CLAUDE.md` | Repository guides for coding agents. |
+| `docs/` | Documentation: [writing content](docs/content.md), [how the site is built](docs/site.md), [maintenance](docs/maintenance.md). |
+| `AGENTS.md` | Repository guide for coding agents (`CLAUDE.md` imports it). |
 
 ## License
 
