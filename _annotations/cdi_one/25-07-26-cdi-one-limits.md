@@ -4,6 +4,7 @@ title:  "CDI one - Limits"
 date:   2025-07-26 20:00:00
 categories: ["Mathematics"]
 tags: ["CDI one"]
+lang: pt-BR
 ---
 
 {% include warning.html 

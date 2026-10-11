@@ -3,6 +3,7 @@ layout: post
 title:  "Ratio and Proportions"
 date:   2024-09-21 17:20:00
 categories: ["Mathematics"]
+description: "Ratios between magnitudes of the same and of different types, unit ratios and proportions, with worked examples."
 ---
 
 {% include mathjax.html %}

@@ -3,6 +3,7 @@ layout: post
 title:  "Pythagorean and Thales Theorems"
 date:   2024-09-27 01:10:00
 categories: ["Mathematics"]
+description: "The Pythagorean theorem for right triangles and Thales' theorem on triangles inscribed in a circle, with figures."
 tags: ["Graphics"]
 ---
 
@@ -27,7 +28,7 @@ Where:
 
 <img width="500" 
      src="https://ichef.bbci.co.uk/images/ic/1200xn/p0dn6xn6.png" 
-     alt="A triangle examplainig the pythagorean theorem">
+     alt="A triangle explaining the pythagorean theorem">
 
 ## Thales' Theorem
 
@@ -45,7 +46,7 @@ Where:
 
 <img width="500" 
      src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Thales%27_Theorem_Simple.svg/1200px-Thales%27_Theorem_Simple.svg.png" 
-     alt="A triangle inside a circle, examplainig the Thale's theorem">
+     alt="A triangle inside a circle, explaining the Thales' theorem">
 
 **It is also applied in triangles:** if a line parallel to one side of a triangle intersects the other two sides, it divides them proportionally, forming a smaller triangle that is similar to the original.
 This is congruence! (I've already talked about this in my previous posts.)

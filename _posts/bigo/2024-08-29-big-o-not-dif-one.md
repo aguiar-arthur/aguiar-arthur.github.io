@@ -3,6 +3,7 @@ layout: post
 title:  "Big O is not difficult - Part 1"
 date:   2024-08-29 23:00:00
 categories: ["Computer Science"]
+description: "The foundations of Big O notation: asymptotic behavior, growth functions and logarithms, explained without the fear."
 tags: ["Big O"]
 ---
 
@@ -10,7 +11,7 @@ tags: ["Big O"]
 
 In this series, I just want to cover the foundations of Big O notation. Nothing better to start from: 
 
-# Asymptotic behavior
+## Asymptotic behavior
 
 Asymptotic behavior in computer science and mathematics describes how a function behaves as its input grows towards infinity. 
 Read this as a loop, and we use this to check if an algorithm is efficient. 
@@ -20,7 +21,7 @@ Basically, "Is this shit slower when it gets bigger?”.
 
 To check if it is efficient or performant, first of all we need to know the Growth Functions.
 
-## Growth Functions
+### Growth Functions
 
 **Constant Growth**: 
 
@@ -32,7 +33,7 @@ A function that increases slower as $$n$$ gets bigger. represented by $$f(n) = l
 
 At least for me, this explain nothing if you don't know what is logarithms, so lets step back again. 
 
-## Logarithms
+### Logarithms
 
 This is a function that represent the exponent of power to which a base number must be raised to produce another number, like $$n^x=y$$. 
 

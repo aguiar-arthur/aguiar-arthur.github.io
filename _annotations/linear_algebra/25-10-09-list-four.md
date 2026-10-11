@@ -4,6 +4,7 @@ title:  "Linear Algebra - List Four"
 date:   2025-10-09 10:00:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]
+lang: pt-BR
 ---
 
 {% include warning.html 

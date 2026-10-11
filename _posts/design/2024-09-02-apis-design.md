@@ -1,13 +1,14 @@
 ---
 layout: post
-title:  "API's Design - Not pieces of advice"
+title:  "APIs Design - Not Pieces of Advice"
 date:   2024-09-02 23:50:00
 categories: ["Design"]
+description: "Practical conventions for designing HTTP APIs: resource hierarchy, queries, status codes and the shape of requests and responses."
 ---
 
 Okay, okay, everything depends. But try to forget about it for a while, try to be more material. Doing this maybe you will be a better developer.
 
-### API hierarchy
+## API hierarchy
 
 The “/” should be separating the system hierarchy.
 
@@ -24,7 +25,7 @@ Like this:
 /categories/{categoryId}
 ```
 
-### Queries
+## Queries
 
 Queries can help you identify different endpoints. They're our bread and butter overflow.
 
@@ -49,14 +50,14 @@ I hate this part too much, but know this is crucial to have a good communication
 4. **4xx (Client Error)**: The request contains bad syntax or cannot be fulfilled.
 5. **5xx (Server Error)**: The server failed to fulfill an apparently valid request.
 
-### Common HTTP Response Status Codes
+## Common HTTP Response Status Codes
 
-### **1xx: Informational**
+## **1xx: Informational**
 
 - **100 Continue**: The server has received the request headers, and the client should proceed to send the request body.
 - **101 Switching Protocols**: The requester has asked the server to switch protocols, and the server has agreed to do so.
 
-### **2xx: Successful**
+## **2xx: Successful**
 
 - **200 OK**: The request has succeeded. The meaning of success depends on the HTTP method (GET, POST, etc.).
 - **201 Created**: The request has been fulfilled, resulting in the creation of a new resource.
@@ -64,7 +65,7 @@ I hate this part too much, but know this is crucial to have a good communication
 - **204 No Content**: The server successfully processed the request, and is not returning any content.
 - **206 Partial Content**: The server is delivering only part of the resource due to a range header sent by the client.
 
-### **3xx: Redirection**
+## **3xx: Redirection**
 
 - **301 Moved Permanently**: The resource requested has been permanently moved to a new URL.
 - **302 Found (Previously "Moved Temporarily")**: The resource is temporarily located at a different URL.
@@ -73,7 +74,7 @@ I hate this part too much, but know this is crucial to have a good communication
 - **307 Temporary Redirect**: The request should be repeated with another URI; however, future requests should still use the original URI.
 - **308 Permanent Redirect**: The resource requested has been moved permanently to a new URI, and future references should use the new URI.
 
-### **4xx: Client Error**
+## **4xx: Client Error**
 
 - **400 Bad Request**: The server could not understand the request due to invalid syntax.
 - **401 Unauthorized**: The client must authenticate itself to get the requested response.
@@ -84,7 +85,7 @@ I hate this part too much, but know this is crucial to have a good communication
 - **410 Gone**: The resource requested is no longer available and will not be available again.
 - **429 Too Many Requests**: The user has sent too many requests in a given amount of time ("rate limiting").
 
-### **5xx: Server Error**
+## **5xx: Server Error**
 
 - **500 Internal Server Error**: The server has encountered a situation it doesn't know how to handle.
 - **501 Not Implemented**: The request method is not supported by the server and cannot be handled.
@@ -93,7 +94,7 @@ I hate this part too much, but know this is crucial to have a good communication
 - **504 Gateway Timeout**: The server, while acting as a gateway or proxy, did not get a response in time from the upstream server.
 - **505 HTTP Version Not Supported**: The server does not support the HTTP protocol version used in the request.
 
-### Head and body (because I don't wanna know about arms and legs)
+## Head and body (because I don't wanna know about arms and legs)
 
 Use headers to control cache, organize your authentication or to organize your responses. 
 The term organize your responses is not good, sorry, so let me give you an example: 
@@ -112,7 +113,7 @@ Now the body, this is the rest, while the headers take care about the the health
 the communication, the body is our envelope, our data container. 
 So throw every sort of trash here, try to not leave a mess to other people deal with.
 
-### Take a look in:
+## Take a look in:
 
 [WRML notation](https://github.com/wrml/wrml)
 

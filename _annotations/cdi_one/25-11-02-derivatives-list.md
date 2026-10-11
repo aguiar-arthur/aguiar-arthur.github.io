@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "CDI one - List of derivatives"
+title:  "CDI one - List of Derivatives"
 date:   2025-11-02 07:30:00
 categories: ["Mathematics"]
 tags: ["CDI one"]
+lang: pt-BR
 ---
 
 {% include warning.html 

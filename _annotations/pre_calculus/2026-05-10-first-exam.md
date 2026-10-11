@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "Pre Calculus - First exam"
+title:  "Pre Calculus - First Exam"
 date:   2026-05-10 08:30:00
 categories: ["Mathematics"]
 tags: ["Pre Calculus"]
+lang: pt-BR
 ---
 
 {% include warning.html 

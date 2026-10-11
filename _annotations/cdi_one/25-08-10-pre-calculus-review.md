@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "Pre Calculus Review"
+title:  "CDI one - Pre Calculus Review"
 date:   2025-08-10 10:00:00
 categories: ["Mathematics"]
 tags: ["Pre Calculus"]
+lang: pt-BR
 ---
 
 {% include warning.html 

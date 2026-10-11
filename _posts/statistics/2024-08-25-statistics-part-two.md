@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "Statistics - Dispersion and probability"
+title:  "Statistics - Dispersion and Probability"
 date:   2024-08-25 23:00:00
 categories: ["Statistics"]
+description: "Measures of dispersion (quantiles, amplitude, standard deviation, variance, covariance, correlation) and an introduction to probability."
 ---
 
-Measures of Dispersion
-======================
+## Measures of Dispersion
 
 Within statistics, measures of dispersion are used to show the degree of distribution of values, 
 that is, to determine the degree of variability. Combining these techniques with measures of central tendency 
@@ -19,8 +19,7 @@ calculating the average age would not help justify anything, as it does not indi
 
 The most commonly used measures of dispersion are:
 
-Quantile
---------
+### Quantile
 
 The quantile is a generalization of the median, meaning it is the value below a determined percentage of the data. 
 We can say that the median is a quantile that works with its percentage at 50%. 
@@ -29,28 +28,24 @@ With numpy, we use the quantile() method, and to define the percentage, we use t
 
 > Note that this function adopts the 50% percentile as the default, which means it is a median.
 
-Amplitude
----------
+### Amplitude
 
 The range is the difference between the smallest and largest value in a sample.
 
-Standard Deviation
-------------------
+### Standard Deviation
 
 The standard deviation indicates how far the data points are from the mean. 
 The greater the deviation, the further the values are from the mean; conversely, 
 the smaller the deviation, the closer they are. With numpy, we use the std() method to calculate this deviation.
 
-Variance
---------
+### Variance
 
 Variance shows how far our values are from the expected value, meaning that the larger the variance, 
 the further the results are from the mean. With numpy, we use the var() method to calculate variance.
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:554/format:webp/1*29Smc1iowe27JQ6Sgm3hUg.jpeg)
 
-Covariance
-----------
+### Covariance
 
 We use variance to measure the dispersion of data relative to a single variable,
 while covariance calculates the dispersion based on two different variables. 
@@ -58,15 +53,13 @@ A covariance of 0 means that the variables are independent of each other.
 If it is positive, the two variables tend to increase or decrease together; 
 conversely, if it is negative, one variable tends to increase as the other decreases. We use cov() for this measure.
 
-Correlation
------------
+### Correlation
 
 Correlation is closely related to covariance. It is used to indicate how strongly one variable is related to another.
 The closer the correlation value is to 1, the more the variables are related. 
 A value of 0 indicates no correlation, while a negative value signifies an inverse correlation between the variables.
 
-Probability
-===========
+## Probability
 
 Probability studies random experiments or phenomena by analyzing the chances of a possible event. 
 The result of a probability calculation can range from 0 to 1, with values closer to 1 indicating a higher likelihood of occurrence.

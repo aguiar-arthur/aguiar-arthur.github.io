@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "Linear Algebra - LU factorization"
+title:  "Linear Algebra - LU Factorization"
 date:   2025-10-09 10:00:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]
+lang: pt-BR
 ---
 
 {% include warning.html 

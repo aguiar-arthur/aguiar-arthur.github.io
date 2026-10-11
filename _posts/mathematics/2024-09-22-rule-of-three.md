@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "Simple and compound rules of three"
+title:  "Simple and Compound Rules of Three"
 date:   2024-09-22 00:40:00
 categories: ["Mathematics"]
+description: "How to solve proportion problems with the simple and the compound rule of three, for directly and inversely proportional quantities."
 ---
 
 {% include mathjax.html %}

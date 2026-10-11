@@ -1,17 +1,18 @@
 ---
 layout: post
-title:  "Distributed Systems - Keeping them sync"
+title:  "Distributed Systems - Keeping Them in Sync"
 date:   2024-12-28 20:50:00
 categories: ["Design"]
+description: "Write-ahead logging, leadership, heartbeats, quorum and leader election: how distributed systems stay consistent and durable."
 tags: ["Distributed Systems"]
 ---
 
-# Write-Ahead Logging and syncrhony
+## Write-Ahead Logging and Synchrony
 
 Or WAL, this is a technique to achieve consistency and durability in distributed systems. 
 Also, you see this every day, every single database use this, to keep tracking of the changes. 
 
-## How it works
+### How it works
 
 The simplest examples focus on a database—a basic one, without sharding. Before making any changes to the data on the disk, 
 you write the changes to a log file. If the database crashes in the middle of a transaction, 
@@ -19,16 +20,16 @@ it can recover the actions by referring to the log file.
 
 <img src="{{ '/assets/images/posts/design/wal-sequence.svg' | relative_url }}" alt="WAL Sequence">
 
-## Multiple nodes
+### Multiple nodes
 
 But I'm talking about DISTRIBUTED systems, our first examples is pretty simple. 
 Let's imagine that we have distributed nodes, and they need to be in sync. 
 
-### Leadership
+#### Leadership
 
 First of all, you will need a main node. The main node is responsible for the system changes, ordering, and the replication. 
 
-### To mantain the leadership
+#### To maintain the leadership
 
 The principal strategies to keep the leadership is the heartbeats and health checks, the lead node send periodic signal to the other nodes, 
 basically saying "I'm alive!". 
@@ -41,13 +42,13 @@ Each time the followers receive a heartbeat, they reset their election timers up
 
 <img src="{{ '/assets/images/posts/design/heartbeat-sequence.svg' | relative_url }}" alt="Heartbeat Sequence">
 
-### Quorum 
+#### Quorum 
 
 A quorum is a mechanism used to ensure consistency and coordination across multiple nodes when processing operations.
 A subset of nodes must agree on an operation before it is considered valid or complete. The quorum is the trashhold, on how much nodes need to have the data commited, 
 or in a election, how much votes a node need to be the leader.
 
-### Election 
+#### Election 
 
 Every time a leader node is down, an election is made.
 Every up and running node broadcasts vote requests to all other nodes, asking for their support in the current term.
@@ -65,8 +66,8 @@ Another block of the broadcast data, is the index of the last log entry in the c
 
 <img src="{{ '/assets/images/posts/design/election-sequence.svg' | relative_url }}" alt="Election Sequence">
 
-### Thanks, bye!
+#### Thanks, bye!
 
-## References
+### References
 
 - FORD, Brendan. Patterns of Distributed Systems. Addison-Wesley Signature Series (Fowler). Boston: Addison-Wesley, 2023.

@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "CDI one - Cos Sin limits"
+title:  "CDI one - Cos and Sin Limits"
 date:   2025-10-09 07:30:00
 categories: ["Mathematics"]
 tags: ["CDI one"]
+lang: pt-BR
 ---
 
 {% include warning.html 

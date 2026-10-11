@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "Matrices Review"
+title:  "Linear Algebra - Matrices Review"
 date:   2025-08-17 10:00:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]
+lang: pt-BR
 ---
 
 {% include warning.html 

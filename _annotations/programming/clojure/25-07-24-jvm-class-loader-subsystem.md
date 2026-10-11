@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Programming - JVM class loader subsystem" 
+title:  "Programming - JVM Class Loader Subsystem"
 date:   2025-07-24 23:40:00
 categories: ["Programming"]
 tags: ["Clojure"]

@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "Lateral Limits"
+title:  "CDI one - Lateral Limits"
 date:   2025-08-17 20:10:00
 categories: ["Mathematics"]
 tags: ["CDI one"]
+lang: pt-BR
 ---
 
 {% include warning.html 

@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "Assembler Directives / pseudo-operations"
+title:  "Assembler Directives (Pseudo-Operations)"
 date:   2024-10-06 17:30:00
 categories: ["Computer Science"]
+description: "x86 assembler directives by category: data definition, storage reservation, segments, control, macros, alignment and constants."
 tags: ["Assembly"]
 ---
 
@@ -12,7 +13,7 @@ All the assembly code used here is **X86.**
 
 There are some categories of assembler directives:
 
-### **Data Definition Directives**
+## **Data Definition Directives**
 
 These directives are used to define and allocate space for variables, constants, or arrays. They also initialize memory with values or reserve space for future use.
 
@@ -26,7 +27,7 @@ message DB 'Hello', 0   ; Defines a byte array initialized with the string "Hell
 num     DW 12345        ; Defines a 16-bit word initialized to 12345.
 ```
 
-### **Storage Reservation Directives**
+## **Storage Reservation Directives**
 
 These directives reserve memory for later use but do not initialize it with any specific value.
 
@@ -38,7 +39,7 @@ These directives reserve memory for later use but do not initialize it with any 
 buffer RESB 64  ; Reserves 64 bytes of memory.
 ```
 
-### **Segment Definition Directives**
+## **Segment Definition Directives**
 
 These directives are used to define different segments in memory, such as code, data, or stack segments. This is important in older architectures where memory is organized in segments.
 
@@ -51,7 +52,7 @@ DATA_SEG SEGMENT
 DATA_SEG ENDS
 ```
 
-### **Control Directives**
+## **Control Directives**
 
 Control directives help control the flow of assembly, the inclusion of external files, or even conditional assembly.
 
@@ -63,7 +64,7 @@ Control directives help control the flow of assembly, the inclusion of external 
 ORG 100h   ; Set the code origin to 0x100.
 ```
 
-### **Macro Directives**
+## **Macro Directives**
 
 Macros in assembly allow you to define a set of instructions that can be reused multiple times. Macro directives handle the declaration and invocation of macros.
 
@@ -78,7 +79,7 @@ PRINT MACRO text
 ENDM
 ```
 
-### **Alignment Directives**
+## **Alignment Directives**
 
 These directives are used to align data or code in memory to specific boundaries (for example, aligning data to a 4-byte boundary).
 
@@ -88,14 +89,14 @@ These directives are used to align data or code in memory to specific boundaries
 ALIGN 4  ; Aligns the next instruction or data to a 4-byte boundary.
 ```
 
-### **Equates and Constants**
+## **Equates and Constants**
 
 These directives are used to define constants or symbolic names for values.
 
 - **EQU**: Defines a constant or a symbolic name for a value.
 - **%DEFINE**: Similar to `#define` in C, used to define macros.
 
-### **Equates** (`EQU`)
+## **Equates** (`EQU`)
 
 ```
 MAX_VALUE EQU 255     ; Defines a constant named MAX_VALUE with a value of 255.
@@ -125,7 +126,7 @@ _start:
 %define MAX_SIZE 256
 ```
 
-### Using almost everything in an example
+## Using almost everything in an example
 
 ```nasm
 section .data           ; Data section
@@ -151,7 +152,7 @@ _start:
 
 Thanks, bye!
 
-### References:
+## References:
 
 - SCHILDT, Herbert. *STL Programming from the Ground Up*. New York: McGraw-Hill, 1999.
 - [PC Assembly Book](https://pacman128.github.io/pcasm/)

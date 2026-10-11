@@ -4,6 +4,7 @@ title:  "Linear Algebra - Vector Spaces"
 date:   2025-09-30 10:00:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]
+lang: pt-BR
 ---
 
 {% include warning.html 

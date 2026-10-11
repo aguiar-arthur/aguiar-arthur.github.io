@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "The water sommelier guide"
+title:  "The Water Sommelier Guide"
 date:   2026-08-28 00:05:00
 categories: ["Misc"]
+description: "How to taste and evaluate bottled water: total dissolved solids, mineral balance, pH, carbonation and a sensory tasting method."
 ---
 
 {% include mathjax.html %}

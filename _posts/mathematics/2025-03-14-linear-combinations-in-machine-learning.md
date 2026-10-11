@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "Linear combinations in machine learning"
+title:  "Linear Combinations in Machine Learning"
 date:   2025-03-14 09:00:00
 categories: ["Mathematics"]
+description: "Vectors, scalars and linear combinations, and how slope and bias in a linear model are coefficients of one."
 ---
 
 {% include mathjax.html %}
@@ -56,7 +57,7 @@ where:
 - $$c_1, c_2, ..., c_n $$ are the scalars (coefficients).  
 - $$w$$ is the resulting vector, which is the linear combination of the given vectors.  
 
-#### The linear combination involves two operations:
+### The linear combination involves two operations:
 - **Scalar multiplication:** Each vector is multiplied by a scalar.
 - **Addition:** The results of the scalar multiplications are added together.
 

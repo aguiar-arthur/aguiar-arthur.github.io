@@ -3,6 +3,7 @@ layout: post
 title:  "Elements of programming style"
 date:   2024-10-31 23:52:00
 categories: ["Programming"]
+description: "What The Elements of Style teaches about programming: drafting, revising and organizing code the way good writers organize prose."
 tags: ["Tech"]
 ---
 
@@ -14,7 +15,7 @@ This book is better than many technical books that try to teach you how to code
 
 If you know how to write well, you know how to organize some code blocks.
 
-### Your are dump: Accept this and go ahead
+### You are dumb: accept this and go ahead
 
 If you need to organize your ideas and create drafts to write an essay, why you think code is different? 
 Use your brain, rewrite you code. You should be adult enough to recognize that you previous 10min code session was shit and you need a refactoring session. 

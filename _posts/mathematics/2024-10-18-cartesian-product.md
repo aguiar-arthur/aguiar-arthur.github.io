@@ -3,6 +3,7 @@ layout: post
 title:  "Cartesian Product"
 date:   2024-10-18 22:20:00
 categories: ["Mathematics"]
+description: "The Cartesian product of sets and where it shows up: coordinate systems in 2D and 3D geometry and products of graphs."
 tags: ["Graphics"]
 ---
 
@@ -27,11 +28,11 @@ $$A×B={(a,b) ∣ a∈A and b∈B}$$
 The Cartesian product can be extended to more than two sets, and it's frequently used in areas like database queries 
 (for joins) or in programming when dealing with combinations of multiple sets or lists.
 
-### Cartesian Product in Geometry
+## Cartesian Product in Geometry
 
 We see cartesian product in **coordinate systems** and **higher-dimensional spaces**.
 
-### 2D and 3D Cartesian Coordinate Systems
+## 2D and 3D Cartesian Coordinate Systems
 
 In geometry, the **Cartesian plane** (2D) and **Cartesian space** (3D) are direct applications of Cartesian products of sets of real numbers.
 
@@ -45,7 +46,7 @@ $$\mathbb{R}3=\mathbb{R}×\mathbb{R}×\mathbb{R}={(x,y,z) ∣ x,y,z∈\mathbb{R}
 
 **I like graph theory, so I would like to highlight a little about this same topic but on graphs!** 
 
-### Cartesian Product in Graph Theory
+## Cartesian Product in Graph Theory
 
 In **graph theory**, we use Cartesian product to get the **product graphs.** 
 the product of two graphs $$G$$ and $$H$$ is a new graph denoted by $$G×H$$. 

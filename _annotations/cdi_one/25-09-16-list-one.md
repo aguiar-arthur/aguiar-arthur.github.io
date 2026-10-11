@@ -4,6 +4,7 @@ title:  "CDI one - List One"
 date:   2025-09-16 07:30:00
 categories: ["Mathematics"]
 tags: ["CDI one"]
+lang: pt-BR
 ---
 
 {% include warning.html 

@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "Multidimensional data model"
+title:  "Multidimensional Data Model"
 date:   2024-08-25 23:30:00
 categories: ["Data Science"]
+description: "OLAP, OLTP, data warehouses and granularity, then the multidimensional data model: fact tables and star, snowflake and constellation schemas."
 ---
 
 
@@ -14,8 +15,7 @@ For this, we must organize our data before passing it on to our Data warehouse,
 one of the solutions is the multidimensional data model, 
 however, every way, however here are some concepts that you will need to know beforehand.
 
-OLAP
-----
+## OLAP
 
 Or “Online Analytical Processing” is a tool used for the analysis and treatment of data in real time, 
 widely used to treat a massive amount of information in the various dimensions of a data warehouse.
@@ -23,8 +23,7 @@ widely used to treat a massive amount of information in the various dimensions o
 **Example**: We are analyzing temporal data and we want to have views by year, 
 day, quarter or semester, this interaction with the user is done by OLAP.
 
-OLTP
-----
+## OLTP
 
 Or “Online Transaction Platform”, refers to systems that record all the operational actions of a stock, guaranteeing its success.
 
@@ -32,15 +31,13 @@ Or “Online Transaction Platform”, refers to systems that record all the oper
 
 **Example**: a bank transaction for example, if it fails the whole action must be reversed, if it is successful, it must be recorded and immutable.
 
-Data warehouse
---------------
+## Data warehouse
 
 This is a database for analysis only, think of it as a copy of the operational database but optimized (let’s talk about it soon) for business intelligence.
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:1334/format:webp/1*1fINE8Su9haewHUFfgF6_A.png)
 
-Data granularity
-----------------
+## Data granularity
 
 We must pay close attention to data granularity as it directly affects the volume in data storage 
 and the speed of search and the level of detail of the information. In a brief explanation, when we have a high granularity 
@@ -64,8 +61,7 @@ so our equation looks like this **Resources X Data = waste of time and money**.
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*6ddUTIXYYGqCFQ-j3FZs7w.jpeg)
 
-Multidimensional data Analysis
-==============================
+## Multidimensional data Analysis
 
 In this analysis we use structured data in the form of a cube (each side of the cube is a dimension), 
 the multidimensional model is the standard in the analysis tools, for example, when we use arithmetic queries with OLAP. 
@@ -73,8 +69,7 @@ This model has a higher performance in queries, besides providing a facility in 
 
 > When the scope of the project is reduced, this model allows a more agile implementation.
 
-Structure
----------
+### Structure
 
 To visualize this model we use a cube, where tables are associated, summarized or aggregated to return some metrics 
 (sales per year, for example). Each table is seen as a dimension, together they form a cube that can have low or high granularity, 
@@ -84,8 +79,7 @@ always depending on the requirements of each project.
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:800/format:webp/1*wuNOtUomBZz2QZ0hbn0UwA.png)
 
-Fact Tables
------------
+### Fact Tables
 
 Fact tables are objects to be analyzed, composed of measures, 
 contexts of each dimension and Foreign Keys, used to link the dimensions to that table.
@@ -104,25 +98,21 @@ The dimensions that will compose our suit are:
 
 The layer will have the Foreign Key for each dimension plus the metrics, such as “total_sales”.
 
-Types of Multidimensional Models
-================================
+## Types of Multidimensional Models
 
-Star layout
------------
+### Star layout
 
 It is the simplest model, where the fact is centralized and composed of dimensions with a large number of data, 
 given that, without redundancy, these dimensions are directly linked to the fact through its Foreign Keys.
 
-Snowflake layout
-----------------
+### Snowflake layout
 
 It is an extension of the star schema, composed of more dimensions reducing redundancy, 
 in the end, we have a greater number of dimensions forming more complex queries and reducing performance.
 
 Models such as the snowflake are arranged so that at each end of the star, it becomes the center of another star (MACHADO, 2013).
 
-Constellation scheme
---------------------
+### Constellation scheme
 
 Or Fact Constellation, is a grouping of dimensions with multiple fact tables,
 its only disadvantage is due to the complexity.

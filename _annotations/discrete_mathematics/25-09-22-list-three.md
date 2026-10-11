@@ -4,6 +4,7 @@ title:  "Discrete Mathematics - List Three"
 date:   2025-09-22 07:00:00
 categories: ["Mathematics"]
 tags: ["Algebra"]
+lang: pt-BR
 ---
 
 {% include warning.html 

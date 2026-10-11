@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "Analytical Geometry - Conicals"
+title:  "Analytical Geometry - Conics"
 date:   2025-06-29 20:00:00
 categories: ["Mathematics"]
 tags: ["Geometry"]
+lang: pt-BR
 ---
 
 {% include warning.html 

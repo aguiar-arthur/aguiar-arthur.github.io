@@ -4,6 +4,7 @@ title:  "Numeric Calculus - Hermite Interpolation"
 date:   2026-06-28 10:00:00
 categories: ["Mathematics"]
 tags: ["Numeric Calculus"]
+lang: pt-BR
 ---
 
 {% include warning.html 

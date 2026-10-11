@@ -3,6 +3,7 @@ layout: post
 title:  "End-to-end principle (don't mess with my layers)"
 date:   2024-09-09 22:50:00
 categories: ["Computer Science"]
+description: "The end-to-end principle: why functions in a distributed system belong at the endpoints, not in the network layers in between."
 ---
 
 This concept was firstly find in [packet switching](https://en.wikipedia.org/wiki/Packet_switching) by Donald Davies, 
@@ -19,6 +20,6 @@ see the HTTPS or SSL/TLS. Lesgo deeper! TCP works that way, just remember the ne
 
 Thanks, bye!
 
-### References
+## References
 
 https://en.wikipedia.org/wiki/End-to-end_principle

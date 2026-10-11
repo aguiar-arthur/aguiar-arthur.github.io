@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "Limits - Exercises One"
+title:  "CDI one - Limits Exercises One"
 date:   2025-08-25 07:30:00
 categories: ["Mathematics"]
 tags: ["CDI one"]
+lang: pt-BR
 ---
 
 {% include warning.html 

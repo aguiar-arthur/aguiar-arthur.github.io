@@ -3,6 +3,7 @@ layout: post
 title:  "Plane Geometry - Congruence"
 date:   2024-09-25 17:20:00
 categories: ["Mathematics"]
+description: "Congruence in plane geometry: the basic concepts and how to check congruence of triangles, quadrilaterals, circles and polygons."
 tags: ["Graphics"]
 ---
 
@@ -27,20 +28,20 @@ The most basics concepts in geometry are probably, **Area** and **Perimeter**.
 
 But here I want to talk more about congruence in geometrical shapes!
 
-### Congruence
+## Congruence
 
 **Congruence**  in two figures having the same shape and size. Congruent figures can be superimposed on each other using transformations such as translation (sliding), rotation (turning), or reflection (flipping). So that way: 
 
 - **Corresponding sides are equal**: All sides of one figure are equal to the corresponding sides of the other figure.
 - **Corresponding angles are equal**: All angles of one figure are equal to the corresponding angles of the other figure.
 
-### Steps to Determine Congruence:
+## Steps to Determine Congruence:
 
 1. **Measure**: Use a ruler or other measuring tools to find the lengths of sides and angles.
 2. **Compare**: Check if the corresponding sides and angles of both figures are equal.
 3. **Confirm**: If all sides and angles correspond perfectly, the figures are congruent.
 
-### Example:
+## Example:
 
 Suppose you have two triangles, $$△ABC$$ triangle and $$△DEF$$ triangle, with the following measurements:
 
@@ -52,15 +53,15 @@ $$AC=DF$$
 
 Since all corresponding sides are equal, the two triangles are congruent.
 
-### **Ways to check congruence in different shapes**
+## **Ways to check congruence in different shapes**
 
 *(Even though I reviewed this, I've revisited those points with AI, so it could be wrong)*
 
-### Congruence of Triangles:
+## Congruence of Triangles:
 
 Congruence of triangles is one of the most common topics in geometry. There are specific rules or criteria to determine whether two triangles are congruent without measuring all sides and angles:
 
-### Triangle Congruence Criteria:
+## Triangle Congruence Criteria:
 
 1. **Side-Side-Side (SSS)**: If all three sides of one triangle are equal to the corresponding sides of another triangle, the triangles are congruent.
 2. **Side-Angle-Side (SAS)**: If two sides and the included angle (the angle between those sides) of one triangle are equal to the corresponding sides and included angle of another triangle, the triangles are congruent.
@@ -68,14 +69,14 @@ Congruence of triangles is one of the most common topics in geometry. There are 
 4. **Angle-Angle-Side (AAS)**: If two angles and any one side of a triangle are equal to the corresponding angles and side of another triangle, the triangles are congruent.
 5. **Hypotenuse-Leg (HL)**: In right triangles, if the hypotenuse and one leg of one triangle are equal to the hypotenuse and corresponding leg of another triangle, the triangles are congruent.
 
-### Congruence of Quadrilaterals:
+## Congruence of Quadrilaterals:
 
 For quadrilaterals, you check if their corresponding sides and angles are equal. To prove congruence between quadrilaterals:
 
 - **Equal sides**: All four sides of the quadrilaterals must be equal to each other.
 - **Equal angles**: The four angles must also be equal.
 
-### Congruence of Circles:
+## Congruence of Circles:
 
 Two circles are congruent if their **radii** are equal. This can be checked by comparing the radius of each circle:
 
@@ -83,7 +84,7 @@ $$r_1 = r_2$$
 
 If the radii are the same, the circles are congruent.
 
-### Congruence of Polygons:
+## Congruence of Polygons:
 
 For polygons with more sides (pentagons, hexagons, etc.), you apply the same approach:
 

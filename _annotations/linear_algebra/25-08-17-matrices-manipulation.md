@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "Matrices Manipulations"
+title:  "Linear Algebra - Matrix Manipulation"
 date:   2025-08-17 20:20:00
 categories: ["Mathematics"]
 tags: ["Linear Algebra"]
+lang: pt-BR
 ---
 
 {% include warning.html 

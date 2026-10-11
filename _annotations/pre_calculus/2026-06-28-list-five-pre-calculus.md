@@ -4,6 +4,7 @@ title:  "Pre Calculus - List Five"
 date:   2026-06-28 10:00:00
 categories: ["Mathematics"]
 tags: ["Pre Calculus"]
+lang: pt-BR
 ---
 
 {% include warning.html 

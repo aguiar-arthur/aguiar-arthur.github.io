@@ -1,8 +1,9 @@
 ---
 layout: post
-title:  "Types of Knowledge – Philosophy"
+title:  "Types of Knowledge - Philosophy"
 date:   2026-02-26 07:00:00
 categories: ["Philosophy"]
+description: "What makes philosophical knowledge distinct from scientific knowledge: its method, its characteristics and its role."
 ---
 
 Philosophical knowledge is not merely a matter of personal opinion or free reflection. It is a structured form of thinking that requires arguments and rational justification. Instead of expressing arbitrary views, philosophical thinking seeks well-founded explanations supported by logical reasoning.
@@ -31,7 +32,7 @@ Referências:
 HESSEN, Johannes — *Teoria do Conhecimento*  
 MARCONDES, Danilo — *Iniciação à História da Filosofia*
 
-# Method and Characteristics of Philosophical Knowledge
+## Method and Characteristics of Philosophical Knowledge
 
 Philosophical knowledge develops through rational reflection, questioning, and critical analysis. Philosophy investigates concepts and examines assumptions that often remain implicit in other forms of knowledge. Instead of accepting ideas as self-evident, philosophical thinking seeks to understand their foundations.
 
@@ -72,7 +73,7 @@ Referências:
 CHAUI, Marilena — *Convite à Filosofia*  
 SEVERINO, Antônio Joaquim — *Metodologia do Trabalho Científico*
 
-# The Role of Philosophical Knowledge
+## The Role of Philosophical Knowledge
 
 Philosophical knowledge occupies a particular place among the forms of knowledge because it investigates the foundations and limits of knowledge itself. While other forms of knowledge focus on specific objects, philosophy examines broader questions such as the meaning of truth, the criteria for the validity of knowledge, and the conditions that make the act of knowing possible.
 
