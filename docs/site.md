@@ -18,7 +18,7 @@ All four are local; `default` and `post` replace the theme's, so the site does n
 | --- | --- | --- |
 | `default` | everything (directly: `404.html`) | `<html lang>` (`page.lang`, then `site.lang`), `head.html`, the only `<main>` landmark with the theme's `.wrapper`, then `footer.html`. |
 | `post` | collection documents (via `defaults:`), `pages/` | "← Home" link, the `<h1>` title and, for collection documents except groups, the date (`<time>`). |
-| `home` | `index.markdown` | Skip link, site title, main navigation, the 5 latest posts and 3 latest annotations (via `list.html`). Books and papers are not on the home page. |
+| `home` | `index.markdown` | Skip link, site title, main navigation, the 5 latest posts, 3 latest annotations and 3 latest paper groups (via `list.html`, each with an empty-state message). Books are not on the home page. |
 | `group` | `_papers/<slug>/index.md` (any collection works) | Language notice when `lang` is not `en`, `description` as intro, the Markdown body, then `file-list.html` with the declared `files`. |
 
 Chains: `group` → `post` → `default`; `home` → `default`. The back link, the date and the footer are English site

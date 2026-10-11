@@ -31,5 +31,16 @@ layout: default
                 </ul>
             {% endif %}
         </section>
+        <section>
+            <h2>Latest Papers</h2>
+            {% assign latest_papers = site.papers | where: "layout", "group" | sort: "date" | reverse | slice: 0, 3 %}
+            {% if latest_papers.size > 0 %}
+                {% include list.html items=latest_papers %}
+            {% else %}
+                <ul class="list">
+                    <li class="list__item">No papers yet.</li>
+                </ul>
+            {% endif %}
+        </section>
     </div>
 </div>
