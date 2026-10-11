@@ -11,14 +11,18 @@
 # pages/ files without an explicit permalink, upper-case or spaced file names, and git tracking a different case than the disk.
 # Warnings are advisory: unknown front-matter keys, date vs. file name mismatch,
 # inconsistent category/tag spelling, unreferenced assets, math without MathJax,
-# images without alt text, PDFs in a group folder that are not declared, new files with a 2-digit year.
+# images without alt text, PDFs in a group folder that are not declared, new files with a 2-digit year,
+# a level-1 heading in the body (the layout already renders the title as the page's h1), a skipped heading level,
+# an underlined (setext) heading, a post or book without `description`, and the pt-BR
+# language notice on a document without `lang:` (screen readers would read it with an English voice).
 # Categories and tags outside _data/taxonomy.yml are errors.
 
 require "yaml"
 require "date"
 require "time"
 
-Dir.chdir(File.expand_path("..", __dir__))
+# CHECK_CONTENT_ROOT points the validator at another tree (the tests use a scratch fixture site).
+Dir.chdir(ENV.fetch("CHECK_CONTENT_ROOT", File.expand_path("..", __dir__)))
 
 COLLECTIONS = %w[_posts _annotations _books _papers].freeze
 TAXONOMY = YAML.safe_load(File.read("_data/taxonomy.yml"), aliases: false)
@@ -156,6 +160,29 @@ docs.each do |file|
     warnings << "#{file}: uses math but does not include mathjax.html" if math && !include_mathjax
     warnings << "#{file}: includes mathjax.html but has no math" if include_mathjax && !math
     warnings << "#{file}: <img> without alt text" if body.match?(/<img(?![^>]*\balt=)[^>]*>/)
+    prose = body.gsub(/^(```|~~~).*?^\1/m, "")
+    if prose.match?(/^#[ \t]/) || prose.match?(/<h1[\s>]/i)
+      warnings << "#{file}: level-1 heading in the body (the title is already the h1; start sections at ##)"
+    end
+    # Underlined (setext) headings: `===` makes a second h1 and both styles slip past the level checks below.
+    if prose.match?(/^[^\s#|>*-].*\n(=+|-{2,})[ \t]*$/)
+      warnings << "#{file}: underlined (=== / ---) heading; use ## / ### instead"
+    end
+    if file.start_with?("_posts/", "_books/") && data["description"].to_s.strip.empty?
+      warnings << "#{file}: no `description` (search engines and link previews would show the first paragraph)"
+    end
+    # Screen-reader users navigate by heading level: after the h1 title, levels go down one step at a time.
+    previous_level = 1
+    prose.scan(/^([#]{2,6})[ \t]+(.+)$/) do |hashes, text|
+      if hashes.size > previous_level + 1
+        warnings << "#{file}: heading \"#{text.strip}\" skips from h#{previous_level} to h#{hashes.size}"
+        break
+      end
+      previous_level = hashes.size
+    end
+    if body.match?(/include warning\.html[^%]*pt-br/i) && !data.key?("lang")
+      warnings << "#{file}: has the pt-BR language notice but no `lang: pt-BR` in its front matter"
+    end
   end
 end
 

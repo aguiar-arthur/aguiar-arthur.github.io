@@ -1,13 +1,15 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Runs the unit tests: Minitest for _includes/ (`bundle exec rake test`) and node:test for assets/js
-# (`npm test`). One entry point for the Git hooks, the Claude Code hook and local use.
+# Runs the unit tests (Minitest: `bundle exec rake test`). One entry point for the Git hooks, the Claude Code
+# hook and local use.
 #
 #   ruby bin/run-tests            # everything; fails if the Ruby tooling is missing
 #   ruby bin/run-tests --staged   # pre-commit: only when a staged file can affect the tests
 #   ruby bin/run-tests --hook     # Claude Code PostToolUse: reads the hook JSON on stdin and runs only
-#                                 # when the edited file can affect the tests
+#                                 # when the edited file can affect the tests. After a Bash command
+#                                 # (which has no file_path) it looks at the files git sees as changed
+#                                 # and runs only if those changed since the last green run.
 #   add --dry-run to any mode to print what would run instead of running it
 #
 # Nothing is printed on success except one summary line. On failure the test output goes to stderr and
@@ -16,33 +18,58 @@
 # In --staged and --hook modes missing tooling (`bundle install` not run yet) is a warning, not a
 # failure, so a fresh clone is not blocked; CI always runs the tests for real.
 
+require "digest"
+require "fileutils"
 require "json"
 require "open3"
 
 ROOT = File.expand_path("..", __dir__)
 
 # Paths (relative to the repository root) whose change can alter a test result.
-RELEVANT = %r{\A(?:_includes/|assets/js/|test/|Rakefile\z|package(?:-lock)?\.json\z|Gemfile(?:\.lock)?\z|_config\.yml\z)}
+RELEVANT = %r{\A(?:_includes/|bin/check-content\z|test/|Rakefile\z|Gemfile(?:\.lock)?\z|_config\.yml\z)}
+# Fingerprint of the relevant uncommitted changes at the last green run (tmp/ is git-ignored). Lets the
+# Bash hook skip the tests when a command did not touch anything relevant since then.
+FINGERPRINT = File.join(ROOT, "tmp", "run-tests-hook.fingerprint")
 
 def relevant?(path)
   relative = path.to_s.sub(%r{\A#{Regexp.escape(ROOT)}/?}, "")
   RELEVANT.match?(relative)
 end
 
-def changed_paths(mode)
+# Modified, staged and untracked files, relative to the repository root.
+def git_changed_paths
+  out, = Open3.capture2("git", "status", "--porcelain", "--untracked-files=all", "-z", chdir: ROOT)
+  out.split("\0").filter_map { |entry| entry[3..] if entry.size > 3 }
+end
+
+def hook_input
+  # Hooks may run without a UTF-8 locale; the JSON is always UTF-8 (paths, commands with accents).
+  input = $stdin.tty? ? "" : $stdin.read.force_encoding(Encoding::UTF_8).scrub
+  input.strip.empty? ? {} : JSON.parse(input)
+rescue JSON::ParserError
+  {}
+end
+
+# Digest of the current content of every relevant changed file (deleted files count as "-").
+def fingerprint(paths)
+  rows = paths.select { |path| relevant?(path) }.sort.map do |path|
+    full = File.join(ROOT, path)
+    "#{path}:#{File.file?(full) ? Digest::SHA256.file(full).hexdigest : '-'}"
+  end
+  rows.empty? ? nil : Digest::SHA256.hexdigest(rows.join("\n"))
+end
+
+def changed_paths(mode, data = {})
   case mode
   when :hook
-    input = $stdin.tty? ? "" : $stdin.read
-    data = input.strip.empty? ? {} : JSON.parse(input)
-    [data.dig("tool_input", "file_path")].compact
+    path = data.dig("tool_input", "file_path")
+    path ? [path] : git_changed_paths
   when :staged
     out, = Open3.capture2("git", "diff", "--cached", "--name-only", chdir: ROOT)
     out.split("\n")
   else
     []
   end
-rescue JSON::ParserError
-  []
 end
 
 def run(label, *command)
@@ -62,8 +89,17 @@ mode = if args.delete("--hook") then :hook
        end
 abort "usage: run-tests [--staged | --hook] [--dry-run]" unless args.empty?
 
-if mode != :all && changed_paths(mode).none? { |path| relevant?(path) }
+data = mode == :hook ? hook_input : {}
+bash_hook = mode == :hook && !data.dig("tool_input", "file_path")
+
+if mode != :all && changed_paths(mode, data).none? { |path| relevant?(path) }
   puts "tests: skipped (no changed file can affect them)" if dry_run
+  exit 0
+end
+
+current_fingerprint = mode == :hook ? fingerprint(git_changed_paths) : nil
+if bash_hook && current_fingerprint && File.exist?(FINGERPRINT) && File.read(FINGERPRINT).strip == current_fingerprint
+  puts "tests: skipped (nothing relevant changed since the last green run)" if dry_run
   exit 0
 end
 
@@ -82,21 +118,15 @@ else
   failed = true
 end
 
-if File.directory?(File.join(ROOT, "node_modules"))
-  if dry_run
-    ran << "js"
-  elsif run("JavaScript tests", "npm", "test", "--silent")
-    ran << "js"
-  else
-    failed = true
-  end
-else
-  warn "tests: JavaScript tests skipped, node_modules is missing (run: npm ci)"
-end
 
 if failed
   warn "tests: FAILED"
   exit 2
+end
+
+if mode == :hook && !dry_run && current_fingerprint
+  FileUtils.mkdir_p(File.dirname(FINGERPRINT))
+  File.write(FINGERPRINT, current_fingerprint)
 end
 
 puts "tests: #{dry_run ? 'would run' : 'ok'} (#{ran.join(', ')})"

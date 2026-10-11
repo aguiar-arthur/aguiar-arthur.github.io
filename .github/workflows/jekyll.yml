@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  # Unit tests: Minitest for _includes/, node:test + jsdom for assets/js (see docs/testing.md).
+  # Unit tests: Minitest for _includes/ and bin/check-content (see docs/maintenance.md).
   # Runs in parallel with `build`; `deploy` needs both.
   test:
     runs-on: ubuntu-latest
@@ -39,20 +39,8 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: npm
-
-      - name: Install JavaScript test dependencies
-        run: npm ci --no-audit --no-fund --ignore-scripts
-
-      - name: Test includes (Ruby)
+      - name: Unit tests
         run: bundle exec rake test
-
-      - name: Test assets/js (Node)
-        run: npm test
 
   build:
     runs-on: ubuntu-latest
