@@ -1,15 +1,16 @@
 ---
 layout: group
-title: "Mônadas: Uma Exposição Matemático-Funcional"
+title: "Sigmat - Mônadas: Uma Exposição Matemático-Funcional"
 date: 2026-10-08 00:00:00
 lang: pt-BR
-permalink: /papers/monads/
-description: "Material de apoio e anotações usadas para a montagem deste artigo."
+permalink: /papers/monads-sigmat/
+description: "Material de apoio e anotações usadas para a montagem e apresentação deste trabalho.
+Este trabalho foi apresentado no IX Sigmat (Simpósio Integrado de Matemática) em 08/10/2026"
 # Only the files listed here appear on the page, in this order.
 # PDFs live next to this file (_papers/monads/).
 files:
-  - file: "artigo.pdf"
-    title: "Mônadas: Uma Exposição Matemático-Funcional"
+  - file: "artigo-sigmat.pdf"
+    title: "Sigmat - Mônadas: Uma Exposição Matemático-Funcional"
   - file: "material-de-apoio.pdf"
     title: "Material de apoio"
   - file: "slides.pdf"
