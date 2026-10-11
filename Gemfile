@@ -14,6 +14,6 @@ end
 
 # Tests (see test/ and the Rakefile). minitest stays on 5.x: 6.x pulls in extra native gems (prism).
 group :test do
-  gem "minitest", "~> 5.27"
+  gem "minitest", "~> 6.0"
   gem "rake"
 end
